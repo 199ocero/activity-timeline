@@ -1,15 +1,15 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace JaOcero\ActivityTimeline;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class SkeletonPlugin implements Plugin
+class ActivityTimelinePlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'skeleton';
+        return 'activity-timeline';
     }
 
     public function register(Panel $panel): void
