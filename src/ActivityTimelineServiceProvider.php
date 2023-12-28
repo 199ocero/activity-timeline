@@ -9,12 +9,12 @@ use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
+use JaOcero\ActivityTimeline\Commands\ActivityTimelineCommand;
+use JaOcero\ActivityTimeline\Testing\TestsActivityTimeline;
 use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use JaOcero\ActivityTimeline\Commands\ActivityTimelineCommand;
-use JaOcero\ActivityTimeline\Testing\TestsActivityTimeline;
 
 class ActivityTimelineServiceProvider extends PackageServiceProvider
 {
@@ -80,7 +80,7 @@ class ActivityTimelineServiceProvider extends PackageServiceProvider
 
         // Handle Stubs
         if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
+            foreach (app(Filesystem::class)->files(__DIR__.'/../stubs/') as $file) {
                 $this->publishes([
                     $file->getRealPath() => base_path("stubs/activity-timeline/{$file->getFilename()}"),
                 ], 'activity-timeline-stubs');
@@ -103,8 +103,8 @@ class ActivityTimelineServiceProvider extends PackageServiceProvider
     {
         return [
             // AlpineComponent::make('activity-timeline', __DIR__ . '/../resources/dist/components/activity-timeline.js'),
-            Css::make('activity-timeline-styles', __DIR__ . '/../resources/dist/activity-timeline.css'),
-            Js::make('activity-timeline-scripts', __DIR__ . '/../resources/dist/activity-timeline.js'),
+            Css::make('activity-timeline-styles', __DIR__.'/../resources/dist/activity-timeline.css'),
+            Js::make('activity-timeline-scripts', __DIR__.'/../resources/dist/activity-timeline.js'),
         ];
     }
 

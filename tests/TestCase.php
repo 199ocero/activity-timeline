@@ -15,10 +15,10 @@ use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use JaOcero\ActivityTimeline\ActivityTimelineServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
-use JaOcero\ActivityTimeline\ActivityTimelineServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -27,7 +27,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'JaOcero\\ActivityTimeline\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'JaOcero\\ActivityTimeline\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
