@@ -8,7 +8,6 @@ use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
-use JaOcero\ActivityTimeline\Testing\TestsActivityTimeline;
 use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
@@ -57,9 +56,6 @@ class ActivityTimelineServiceProvider extends PackageServiceProvider
 
         // Icon Registration
         FilamentIcon::register($this->getIcons());
-
-        // Testing
-        Testable::mixin(new TestsActivityTimeline());
     }
 
     protected function getAssetPackageName(): ?string
