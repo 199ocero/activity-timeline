@@ -4,7 +4,10 @@
     "keywords": [
         "jaocero",
         "laravel",
-        "activity-timeline"
+        "activity-timeline",
+        "timeline",
+        "filament-infolists",
+        "filamentphp"
     ],
     "homepage": "https://github.com/jaocero/activity-timeline",
     "support": {
@@ -59,10 +62,7 @@
         "laravel": {
             "providers": [
                 "JaOcero\\ActivityTimeline\\ActivityTimelineServiceProvider"
-            ],
-            "aliases": {
-                "ActivityTimeline": "JaOcero\\ActivityTimeline\\Facades\\ActivityTimeline"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
