@@ -32,26 +32,8 @@ class ActivityTimelineServiceProvider extends PackageServiceProvider
         $package->name(static::$name)
             ->hasCommands($this->getCommands())
             ->hasInstallCommand(function (InstallCommand $command) {
-                $command
-                    ->publishConfigFile()
-                    ->publishMigrations()
-                    ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub('jaocero/activity-timeline');
+                $command->askToStarRepoOnGitHub('jaocero/activity-timeline');
             });
-
-        $configFileName = $package->shortName();
-
-        if (file_exists($package->basePath("/../config/{$configFileName}.php"))) {
-            $package->hasConfigFile();
-        }
-
-        if (file_exists($package->basePath('/../database/migrations'))) {
-            $package->hasMigrations($this->getMigrations());
-        }
-
-        if (file_exists($package->basePath('/../resources/lang'))) {
-            $package->hasTranslations();
-        }
 
         if (file_exists($package->basePath('/../resources/views'))) {
             $package->hasViews(static::$viewNamespace);
@@ -78,15 +60,6 @@ class ActivityTimelineServiceProvider extends PackageServiceProvider
         // Icon Registration
         FilamentIcon::register($this->getIcons());
 
-        // Handle Stubs
-        if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__.'/../stubs/') as $file) {
-                $this->publishes([
-                    $file->getRealPath() => base_path("stubs/activity-timeline/{$file->getFilename()}"),
-                ], 'activity-timeline-stubs');
-            }
-        }
-
         // Testing
         Testable::mixin(new TestsActivityTimeline());
     }
@@ -103,8 +76,8 @@ class ActivityTimelineServiceProvider extends PackageServiceProvider
     {
         return [
             // AlpineComponent::make('activity-timeline', __DIR__ . '/../resources/dist/components/activity-timeline.js'),
-            Css::make('activity-timeline-styles', __DIR__.'/../resources/dist/activity-timeline.css'),
-            Js::make('activity-timeline-scripts', __DIR__.'/../resources/dist/activity-timeline.js'),
+            // Css::make('activity-timeline-styles', __DIR__.'/../resources/dist/activity-timeline.css'),
+            // Js::make('activity-timeline-scripts', __DIR__.'/../resources/dist/activity-timeline.js'),
         ];
     }
 
@@ -113,9 +86,7 @@ class ActivityTimelineServiceProvider extends PackageServiceProvider
      */
     protected function getCommands(): array
     {
-        return [
-            ActivityTimelineCommand::class,
-        ];
+        return [];
     }
 
     /**
@@ -147,8 +118,6 @@ class ActivityTimelineServiceProvider extends PackageServiceProvider
      */
     protected function getMigrations(): array
     {
-        return [
-            'create_activity-timeline_table',
-        ];
+        return [];
     }
 }
