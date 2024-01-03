@@ -1,5 +1,6 @@
 @php
     use Filament\Infolists\Components\IconEntry\IconEntrySize;
+    use JaOcero\ActivityTimeline\Enums\Direction;
 @endphp
 <x-filament::section :aside="$isAside()">
     <x-slot name="heading">
@@ -12,7 +13,7 @@
 
     @if (count($childComponentContainers = $getChildComponentContainers()) &&
             count($getChildComponentContainers()[0]->getComponents()) > 0)
-        @if ($getDirection() == \App\Infolists\Enums\Direction::Vertical)
+        @if ($getDirection() == Direction::Vertical)
             <ol class="relative ml-3 border-gray-300 border-s dark:border-gray-700">
                 @foreach ($childComponentContainers as $index => $container)
                     @php
@@ -73,18 +74,8 @@
                         }
 
                     @endphp
-                    <li @class([
-                        'ms-8',
-                        'mb-0' => $loop->last,
-                        'mb-8' => !$loop->last && !$isComponentEmpty && !$isOnlyDate,
-                        'mb-14' => !$loop->last && $isComponentEmpty,
-                        'mb-10' => !$loop->last && $isOnlyDate,
-                    ])>
-                        <div @class([
-                            'flex',
-                            'items-center' => $isComponentEmpty,
-                            'items-start' => !$isComponentEmpty,
-                        ])>
+                    <li @class(['ms-8', 'mb-0' => $loop->last, 'mb-8' => !$loop->last])>
+                        <div class="flex items-start">
                             @php
                                 $color = $activityIcon ? $activityIcon->getColor($activityIcon->getState()) : 'gray';
                                 $size = $activityIcon ? $activityIcon->getSize($activityIcon->getState()) : IconEntrySize::Medium;
@@ -93,7 +84,7 @@
 
                             @if ($icon)
                                 <span @class([
-                                    'absolute flex items-center justify-center rounded-full ring-4 ring-white dark:ring-gray-900 dark:bg-gray-800',
+                                    'absolute flex items-center justify-center rounded-full dark:bg-gray-800',
                                     match ($size) {
                                         IconEntrySize::ExtraSmall, 'xs' => 'w-5 h-5 -start-[10px] p-[2px]',
                                         IconEntrySize::Small, 'sm' => 'h-6 w-6 -start-[12px] p-[5px]',
@@ -114,24 +105,12 @@
                             @else
                                 <div @class([
                                     'absolute w-4 h-4 bg-gray-200 border border-white rounded-full -start-2 dark:border-gray-900 dark:bg-gray-700',
-                                    match ($size) {
-                                        IconEntrySize::ExtraSmall, 'xs' => 'mt-[1.5px]',
-                                        IconEntrySize::Small, 'sm' => 'mt-[2px]',
-                                        IconEntrySize::Medium, 'md' => 'mt-[2.5px]',
-                                        IconEntrySize::Large, 'lg' => 'mt-[3px]',
-                                        IconEntrySize::ExtraLarge, 'xl' => 'mt-[3.5px]',
-                                        default => 'mt-[2.5px]',
-                                    },
                                 ])>
                                 </div>
                             @endif
-                            <div @class([
-                                'flex flex-col',
-                                'space-y-2' => !$isOnlyDate,
-                                'space-y-0' => $isOnlyDate,
-                            ])>
+                            <div class="mr-8 space-y-2">
                                 @if (!$isActivityBadgeEmpty)
-                                    <div class="flex mt-1">
+                                    <div class="flex">
                                         {{ $activityBadge }}
                                     </div>
                                 @endif
@@ -143,7 +122,7 @@
                     </li>
                 @endforeach
             </ol>
-        @elseif ($getDirection() == \App\Infolists\Enums\Direction::Horizontal)
+        @elseif ($getDirection() == Direction::Horizontal)
             <ol @class([
                 'md:grid md:gap-y-10',
                 match ($getHorizontalItems('md')) {
@@ -240,20 +219,28 @@
                         'mb-14 md:mb-0' => !$loop->last && $isComponentEmpty,
                         'mb-10 md:mb-0' => !$loop->last && $isOnlyDate,
                     ])>
-                        <div @class([
-                            'flex md:items-center md:mb-3',
-                            'items-center' => $isComponentEmpty,
-                            'items-start' => !$isComponentEmpty,
-                        ])>
-                            @php
-                                $color = $activityIcon ? $activityIcon->getColor($activityIcon->getState()) : 'gray';
-                                $size = $activityIcon ? $activityIcon->getSize($activityIcon->getState()) : IconEntrySize::Medium;
-                                $icon = $activityIcon ? $activityIcon->getIcon($activityIcon->getState()) : null;
-                            @endphp
+                        @php
+                            $color = $activityIcon ? $activityIcon->getColor($activityIcon->getState()) : 'gray';
+                            $size = $activityIcon ? $activityIcon->getSize($activityIcon->getState()) : IconEntrySize::Medium;
+                            $icon = $activityIcon ? $activityIcon->getIcon($activityIcon->getState()) : null;
+                        @endphp
 
+                        <div @class([
+                            'flex md:items-center items-start',
+                            $icon
+                                ? 'md:mb-[16px]'
+                                : match ($size) {
+                                    IconEntrySize::ExtraSmall, 'xs' => 'md:mb-[24px]',
+                                    IconEntrySize::Small, 'sm' => 'md:mb-[28px]',
+                                    IconEntrySize::Medium, 'md' => 'md:mb-[32px]',
+                                    IconEntrySize::Large, 'lg' => 'md:mb-[36px]',
+                                    IconEntrySize::ExtraLarge, 'xl' => 'md:mb-[40px]',
+                                    default => 'md:mb-[32px]',
+                                },
+                        ])>
                             @if ($icon)
                                 <span @class([
-                                    'md:z-10 md:p-[8px] flex items-center justify-center rounded-full ring-4 ring-white dark:ring-gray-900 dark:bg-gray-800',
+                                    'md:z-10 flex items-center justify-center rounded-full dark:bg-gray-800',
                                     'absolute md:static',
                                     match ($size) {
                                         IconEntrySize::ExtraSmall, 'xs' => 'w-5 h-5 -start-[10px] p-[2px]',
@@ -281,20 +268,14 @@
                                     match ($size) {
                                         IconEntrySize::ExtraSmall,
                                         'xs'
-                                            => 'mt-[1.5px] md:mt-[10px] -start-[8px] md:-start-0',
-                                        IconEntrySize::Small,
-                                        'sm'
-                                            => 'mt-[2px] md:mt-[12px] -start-[8px] md:-start-0',
-                                        IconEntrySize::Medium,
-                                        'md'
-                                            => 'mt-[2.5px] md:mt-[16px] -start-[8px] md:-start-0',
-                                        IconEntrySize::Large,
-                                        'lg'
-                                            => 'mt-[3px] md:mt-[18px] -start-[8px] md:-start-0',
+                                            => 'md:mt-[10px] -start-[8px] md:-start-0',
+                                        IconEntrySize::Small, 'sm' => 'md:mt-[12px] -start-[8px] md:-start-0',
+                                        IconEntrySize::Medium, 'md' => 'md:mt-[16px] -start-[8px] md:-start-0',
+                                        IconEntrySize::Large, 'lg' => 'md:mt-[18px] -start-[8px] md:-start-0',
                                         IconEntrySize::ExtraLarge,
                                         'xl'
-                                            => 'mt-[2.5px] md:mt-[20px] -start-[8px] md:-start-0',
-                                        default => 'mt-[2.5px] md:mt-[16px] -start-[8px] md:-start-0',
+                                            => 'md:mt-[20px] -start-[8px] md:-start-0',
+                                        default => 'md:mt-[16px] -start-[8px] md:-start-0',
                                     },
                                 ])>
                                 </div>
@@ -311,14 +292,9 @@
                                 ])></div>
                             @endif
                         </div>
-                        <div @class([
-                            'flex flex-col',
-                            'space-y-2' => !$isOnlyDate,
-                            'space-y-0' => $isOnlyDate,
-                            'mr-5',
-                        ])>
+                        <div class="mr-8 space-y-2">
                             @if (!$isActivityBadgeEmpty)
-                                <div class="flex mt-1">
+                                <div class="flex">
                                     {{ $activityBadge }}
                                 </div>
                             @endif
