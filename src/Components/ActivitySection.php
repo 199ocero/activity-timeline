@@ -12,24 +12,33 @@ class ActivitySection extends Entry
 {
     protected string $view = 'activity-timeline::infolists.components.activity-section';
 
-    // protected string|Closure|null $description = null;
+    protected string | Closure | null $description = null;
+
+    protected int | Closure | null $itemsToShow = null;
 
     // protected Direction|string $direction = Direction::Vertical;
 
     // protected array|int|null $horizontalItems = null;
 
-    protected bool|Closure|null $isAside = null;
+    protected bool |Closure | null $isAside = null;
 
-    public function description(string|Closure|null $description = null): static
+    public function description(string | Closure | null $description = null): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function aside(bool|Closure|null $condition = true): static
+    public function aside(bool | Closure| null $condition = true): static
     {
         $this->isAside = $condition;
+
+        return $this;
+    }
+
+    public function itemsToShow(int | Closure $items): static
+    {
+        $this->itemsToShow = $items;
 
         return $this;
     }
@@ -44,12 +53,17 @@ class ActivitySection extends Entry
         return $this->evaluate($this->description);
     }
 
+    public function getItemsToShow(): int | null
+    {
+        return $this->evaluate($this->itemsToShow);
+    }
+
     /**
      * @return array<ComponentContainer>
      */
     public function getChildComponentContainers(bool $withHidden = false): array
     {
-        if ((! $withHidden) && $this->isHidden()) {
+        if ((!$withHidden) && $this->isHidden()) {
             return [];
         }
 
