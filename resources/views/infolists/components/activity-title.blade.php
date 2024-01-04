@@ -1,3 +1,3 @@
-<h3 class="text-base font-semibold text-gray-900 dark:text-white">
+<h3 class="font-semibold text-gray-800 dark:text-white">
     {{ $getState() ?? $getPlaceholder() }}
 </h3>

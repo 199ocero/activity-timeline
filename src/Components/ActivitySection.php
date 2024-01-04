@@ -12,13 +12,13 @@ class ActivitySection extends Entry
 {
     protected string $view = 'activity-timeline::infolists.components.activity-section';
 
-    protected string|Closure|null $description = null;
+    // protected string|Closure|null $description = null;
 
-    protected Direction|string $direction = Direction::Vertical;
+    // protected Direction|string $direction = Direction::Vertical;
+
+    // protected array|int|null $horizontalItems = null;
 
     protected bool|Closure|null $isAside = null;
-
-    protected array|int|null $horizontalItems = null;
 
     public function description(string|Closure|null $description = null): static
     {
@@ -27,34 +27,9 @@ class ActivitySection extends Entry
         return $this;
     }
 
-    public function direction(Direction|string $direction = Direction::Vertical): static
-    {
-        if (in_array($direction, [Direction::Horizontal, Direction::Vertical])) {
-            $this->direction = $direction;
-        } else {
-            $this->direction = Direction::Vertical;
-        }
-
-        return $this;
-    }
-
     public function aside(bool|Closure|null $condition = true): static
     {
         $this->isAside = $condition;
-
-        return $this;
-    }
-
-    public function horizontalItems(array|int|null $items = 3): static
-    {
-        if (! is_array($items)) {
-            if ($items === 0 || $items === 1) {
-                throw new \InvalidArgumentException('Invalid value provided for horizontal items. Please use a value other than 0 or 1.');
-            }
-            $this->horizontalItems = ['lg' => $items];
-        } else {
-            $this->horizontalItems = $items;
-        }
 
         return $this;
     }
@@ -69,22 +44,13 @@ class ActivitySection extends Entry
         return $this->evaluate($this->description);
     }
 
-    public function getDirection(): Direction|string
-    {
-        return $this->evaluate($this->direction);
-    }
-
-    public function getHorizontalItems(?string $breakpoint = null): ?int
-    {
-        return $this->evaluate($this->horizontalItems[$breakpoint] ?? null);
-    }
 
     /**
      * @return array<ComponentContainer>
      */
     public function getChildComponentContainers(bool $withHidden = false): array
     {
-        if ((! $withHidden) && $this->isHidden()) {
+        if ((!$withHidden) && $this->isHidden()) {
             return [];
         }
 
@@ -106,4 +72,43 @@ class ActivitySection extends Entry
 
         return $containers;
     }
+
+    // @todo: for now we're not using this
+    // public function direction(Direction|string $direction = Direction::Vertical): static
+    // {
+    //     if (in_array($direction, [Direction::Horizontal, Direction::Vertical])) {
+    //         $this->direction = $direction;
+    //     } else {
+    //         $this->direction = Direction::Vertical;
+    //     }
+
+    //     return $this;
+    // }
+
+    // @todo: for now we're not using this
+    // public function horizontalItems(array|int|null $items = 3): static
+    // {
+    //     if (! is_array($items)) {
+    //         if ($items === 0 || $items === 1) {
+    //             throw new \InvalidArgumentException('Invalid value provided for horizontal items. Please use a value other than 0 or 1.');
+    //         }
+    //         $this->horizontalItems = ['lg' => $items];
+    //     } else {
+    //         $this->horizontalItems = $items;
+    //     }
+
+    //     return $this;
+    // }
+
+    // @todo: for now we're not using this
+    // public function getDirection(): Direction|string
+    // {
+    //     return $this->evaluate($this->direction);
+    // }
+
+    // @todo: for now we're not using this
+    // public function getHorizontalItems(?string $breakpoint = null): ?int
+    // {
+    //     return $this->evaluate($this->horizontalItems[$breakpoint] ?? null);
+    // }
 }

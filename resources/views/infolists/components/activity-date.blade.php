@@ -1,3 +1,5 @@
-<div class="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-    {{ $getState() != null ? $getDate($getState()) : $getPlaceholder() }}
+<div class="my-4 first:mt-0">
+    <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">
+        {{ $getState() != null ? $getDate($getState()) : $getPlaceholder() }}
+    </p>
 </div>
