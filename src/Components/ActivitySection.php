@@ -44,13 +44,12 @@ class ActivitySection extends Entry
         return $this->evaluate($this->description);
     }
 
-
     /**
      * @return array<ComponentContainer>
      */
     public function getChildComponentContainers(bool $withHidden = false): array
     {
-        if ((!$withHidden) && $this->isHidden()) {
+        if ((! $withHidden) && $this->isHidden()) {
             return [];
         }
 
