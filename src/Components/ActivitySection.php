@@ -75,7 +75,7 @@ class ActivitySection extends Entry
         return (bool) ($this->evaluate($this->isAside) ?? false);
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->evaluate($this->description);
     }

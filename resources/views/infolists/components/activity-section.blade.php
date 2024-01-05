@@ -53,7 +53,24 @@
                     <!-- Item -->
                     <div class="flex gap-x-3">
                         <!-- Icon -->
-                        {{ $activityIcon }}
+                        @if($activityIcon)
+                            {{ $activityIcon }}
+                        @else
+                            <div
+                                class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-gray-700">
+                                <div @class([
+                                    'relative z-10 flex items-center justify-center',
+                                    match (IconEntrySize::Medium) {
+                                        IconEntrySize::Small, 'sm' => 'w-7 h-7',
+                                        IconEntrySize::Medium, 'md' => 'w-8 h-8',
+                                        IconEntrySize::Large, 'lg' => 'w-9 h-9',
+                                        default => 'w-8 h-8',
+                                    },
+                                ])>
+                                    <div class="w-2 h-2 bg-gray-400 rounded-full dark:bg-gray-600"></div>
+                                </div>
+                            </div>
+                        @endif
                         <!-- End Icon -->
 
                         <!-- Right Content -->
