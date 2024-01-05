@@ -23,7 +23,7 @@ Add the plugin's views to your `tailwind.config.js` file.
 ```js
 content: [
     ...
-    ./vendor/jaocero/activity-timeline/resources/views/**/*.blade.php',
+    './vendor/jaocero/activity-timeline/resources/views/**/*.blade.php',
 ]
 ```
 
