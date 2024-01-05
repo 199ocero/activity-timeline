@@ -1,6 +1,6 @@
 {
     "name": "jaocero/activity-timeline",
-    "description": "A filament plugin to display a chronological sequence of events or activities.",
+    "description": "Activity Timeline plugin conveniently presents upcoming, ongoing, and past activities, offering a comprehensive view of events.",
     "keywords": [
         "jaocero",
         "laravel",
