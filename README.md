@@ -1,13 +1,9 @@
-# A filament plugin to display a chronological sequence of events or activities.
+# Activity Timeline
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/jaocero/activity-timeline.svg?style=flat-square)](https://packagist.org/packages/jaocero/activity-timeline)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/jaocero/activity-timeline/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/jaocero/activity-timeline/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/jaocero/activity-timeline/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/jaocero/activity-timeline/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/jaocero/activity-timeline.svg?style=flat-square)](https://packagist.org/packages/jaocero/activity-timeline)
 
-
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+TActivity Timeline plugin conveniently presents upcoming, ongoing, and past activities, offering a comprehensive view of events.
 
 ## Installation
 
@@ -17,45 +13,102 @@ You can install the package via composer:
 composer require jaocero/activity-timeline
 ```
 
-You can publish and run the migrations with:
+To adhere to Filament's theming approach, you'll be required to employ a personalized theme in order to utilize this plugin.
 
-```bash
-php artisan vendor:publish --tag="activity-timeline-migrations"
-php artisan migrate
-```
+> **Custom Theme Installation**
+> [Filament Docs](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme)
 
-You can publish the config file with:
+Add the plugin's views to your `tailwind.config.js` file.
 
-```bash
-php artisan vendor:publish --tag="activity-timeline-config"
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="activity-timeline-views"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
+```js
+content: [
+    ...
+    ./vendor/jaocero/activity-timeline/resources/views/**/*.blade.php',
+]
 ```
 
 ## Usage
+Currently, this plugin is exclusively accessible within the Infolists builder. Below is the code demonstrating its usage. Also, it solely functions with ->state([]) and doesn't yet support the use of ->record().
 
 ```php
-$activityTimeline = new JaOcero\ActivityTimeline();
-echo $activityTimeline->echoPhrase('Hello, JaOcero!');
+public function activityTimelineInfolist(Infolist $infolist): Infolist
+{
+    return $infolist
+        ->state([
+            'activities' => [
+                [
+                    'title' => 'Published Article - Published with Laravel Filament and Tailwind CSS',
+                    'description' => 'Approved and published.',
+                    'status' => 'published',
+                    'created_at' => now()->addDays(8),
+                ],
+                [
+                    'title' => 'Reviewing Article - Final Touches',
+                    'description' => 'Reviewing the article and making it ready for publication.',
+                    'status' => 'reviewing',
+                    'created_at' => now()->addDays(5),
+                ],
+                [
+                    'title' => 'Drafting Article - Make it ready for review',
+                    'description' => 'Drafting the article and making it ready for review.',
+                    'status' => 'drafting',
+                    'created_at' => now()->addDays(2),
+                ],
+                [
+                    'title' => 'Ideation - Looking for Ideas',
+                    'description' => 'Idea for my article.',
+                    'status' => 'ideation',
+                    'created_at' => now()->subDays(7),
+                ]
+            ]
+        ])
+        ->schema([
+            ActivitySection::make('activities')
+                ->label('My Activities')
+                ->description('These are the activities that have been recorded.')
+                ->schema([
+                    ActivityDate::make('created_at')
+                        ->date('F j, Y g:i A', 'Asia/Manila')
+                        ->placeholder('No date is set.'),
+                    ActivityIcon::make('status')
+                        ->icon(fn (string | null $state): string | null => match ($state) {
+                            'ideation' => 'heroicon-m-light-bulb',
+                            'drafting' => 'heroicon-m-bolt',
+                            'reviewing' => 'heroicon-m-document-magnifying-glass',
+                            'published' => 'heroicon-m-rocket-launch',
+                            default => null,
+                        })
+                        ->color(fn (string | null $state): string | null => match ($state) {
+                            'ideation' => 'purple',
+                            'drafting' => 'info',
+                            'reviewing' => 'warning',
+                            'published' => 'success',
+                            default => 'gray',
+                        })
+                        ->size(IconEntrySize::Medium),
+                    ActivityBadge::make('status')
+                        ->color(fn (string | null $state): string | null => match ($state) {
+                            'ideation' => 'purple',
+                            'drafting' => 'info',
+                            'reviewing' => 'warning',
+                            'published' => 'success',
+                            default => 'gray',
+                        })
+                        ->size(BadgeSize::Medium)
+                        ->placeholder('No status'),
+                    ActivityTitle::make('title')
+                        ->placeholder('No title is set'),
+                    ActivityDescription::make('description')
+                        ->placeholder('No description is set'),
+                ])
+                ->showItemsCount(2)
+                ->showItemsLabel('View Old')
+                ->showItemsIcon('heroicon-m-chevron-down')
+                ->showItemsColor('gray')
+                ->aside(true)
+        ]);
+}
 ```
-
-## Testing
-
-```bash
-composer test
-```
-
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
