@@ -14,7 +14,13 @@ class ActivitySection extends Entry
 
     protected string | Closure | null $description = null;
 
-    protected int | Closure | null $itemsToShow = null;
+    protected int | Closure | null $showItemsCount = null;
+
+    protected string | Closure | null $showItemsLabel = null;
+
+    protected string | Closure | null $showItemsIcon = null;
+
+    protected string | Closure | null $showItemsColor = null;
 
     // protected Direction|string $direction = Direction::Vertical;
 
@@ -36,9 +42,30 @@ class ActivitySection extends Entry
         return $this;
     }
 
-    public function itemsToShow(int | Closure $items): static
+    public function showItemsCount(int | Closure $items): static
     {
-        $this->itemsToShow = $items;
+        $this->showItemsCount = $items;
+
+        return $this;
+    }
+
+    public function showItemsLabel(string | Closure $label): static
+    {
+        $this->showItemsLabel = $label;
+
+        return $this;
+    }
+
+    public function showItemsIcon(string | Closure | null $icon = null): static
+    {
+        $this->showItemsIcon = $icon;
+
+        return $this;
+    }
+
+    public function showItemsColor(string | Closure $color): static
+    {
+        $this->showItemsColor = $color;
 
         return $this;
     }
@@ -53,9 +80,30 @@ class ActivitySection extends Entry
         return $this->evaluate($this->description);
     }
 
-    public function getItemsToShow(): int | null
+    public function getShowItemsCount(): int | null
     {
-        return $this->evaluate($this->itemsToShow);
+        $showItemsCount =  $this->evaluate($this->showItemsCount);
+
+        if ($showItemsCount == 0) {
+            return null;
+        }
+
+        return $showItemsCount;
+    }
+
+    public function getShowItemsLabel(): string
+    {
+        return $this->evaluate($this->showItemsLabel) ?? 'Show More';
+    }
+
+    public function getShowItemsIcon(): ?string
+    {
+        return $this->evaluate($this->showItemsIcon);
+    }
+
+    public function getShowItemsColor(): string
+    {
+        return $this->evaluate($this->showItemsColor) ?? 'gray';
     }
 
     /**

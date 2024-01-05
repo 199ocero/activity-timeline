@@ -14,10 +14,11 @@
     @if (count($childComponentContainers = $getChildComponentContainers()) &&
             count($childComponentContainers[0]->getComponents()) > 0)
         @php
-            $itemsCount = count($childComponentContainers);
+            $childItemsCount = count($childComponentContainers);
+            $showItemsCount = $getShowItemsCount() ?? $childItemsCount;
         @endphp
 
-        <div x-data="{ itemsCount: @js($itemsCount), itemsToShow: @js($getItemsToShow() ?? $itemsCount) }">
+        <div x-data="{ childItemsCount: @js($childItemsCount), showItemsCount: @js($showItemsCount), totalShowItemsCount: @js($showItemsCount) }">
             @foreach ($childComponentContainers as $index => $container)
                 @php
                     $activityComponents = [
@@ -39,11 +40,12 @@
                 @endphp
 
                 <!-- Timeline -->
-                <div x-show="@js($index) < itemsToShow" @class([
-                    'flex flex-col',
-                    'mb-2' => !$loop->last,
-                    'mb-0' => $loop->last,
-                ])>
+                <div x-show="@js($index) < totalShowItemsCount" :key="@js(rand())"
+                    @class([
+                        'flex flex-col',
+                        'mb-2' => !$loop->last,
+                        'mb-0' => $loop->last,
+                    ])>
                     <!-- Date -->
                     {{ $activityDate }}
                     <!-- End Date -->
@@ -55,7 +57,7 @@
                         <!-- End Icon -->
 
                         <!-- Right Content -->
-                        <div class="grow pt-0.5 mb-10 space-y-1">
+                        <div class='mb-5 space-y-1 grow'>
                             {{-- Bagde --}}
                             @if ($activityBadge)
                                 <div class="flex">
@@ -77,14 +79,19 @@
                 <!-- End Timeline -->
             @endforeach
 
-            <!-- Item -->
-            <div x-show="itemsToShow < itemsCount" class="ps-[7px] flex gap-x-3">
-                <button x-on:click="itemsToShow += itemsToShow" type="button"
-                    class="inline-flex items-center text-sm font-medium text-blue-600 hs-collapse-toggle hs-collapse-open:hidden text-start gap-x-1 decoration-2 hover:underline dark:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Show older
-                </button>
+            <!-- Show More -->
+            <div x-show="totalShowItemsCount < childItemsCount">
+                @php
+                    $icon = $getShowItemsIcon();
+                    $label = $getShowItemsLabel();
+                    $color = $getShowItemsColor();
+                @endphp
+                <x-filament::link x-on:click="totalShowItemsCount += showItemsCount" :icon="$icon" :color="$color"
+                    class="cursor-pointer hover:underline">
+                    {{ $label }}
+                </x-filament::link>
             </div>
-            <!-- End Item -->
+            <!-- End Show More -->
         </div>
     @endif
 </x-filament::section>
