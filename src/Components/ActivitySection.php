@@ -12,58 +12,58 @@ class ActivitySection extends Entry
 {
     protected string $view = 'activity-timeline::infolists.components.activity-section';
 
-    protected string | Closure | null $description = null;
+    protected string|Closure|null $description = null;
 
-    protected int | Closure | null $showItemsCount = null;
+    protected int|Closure|null $showItemsCount = null;
 
-    protected string | Closure | null $showItemsLabel = null;
+    protected string|Closure|null $showItemsLabel = null;
 
-    protected string | Closure | null $showItemsIcon = null;
+    protected string|Closure|null $showItemsIcon = null;
 
-    protected string | Closure | null $showItemsColor = null;
+    protected string|Closure|null $showItemsColor = null;
 
     // protected Direction|string $direction = Direction::Vertical;
 
     // protected array|int|null $horizontalItems = null;
 
-    protected bool |Closure | null $isAside = null;
+    protected bool|Closure|null $isAside = null;
 
-    public function description(string | Closure | null $description = null): static
+    public function description(string|Closure|null $description = null): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function aside(bool | Closure| null $condition = true): static
+    public function aside(bool|Closure|null $condition = true): static
     {
         $this->isAside = $condition;
 
         return $this;
     }
 
-    public function showItemsCount(int | Closure $items): static
+    public function showItemsCount(int|Closure $items): static
     {
         $this->showItemsCount = $items;
 
         return $this;
     }
 
-    public function showItemsLabel(string | Closure $label): static
+    public function showItemsLabel(string|Closure $label): static
     {
         $this->showItemsLabel = $label;
 
         return $this;
     }
 
-    public function showItemsIcon(string | Closure | null $icon = null): static
+    public function showItemsIcon(string|Closure|null $icon = null): static
     {
         $this->showItemsIcon = $icon;
 
         return $this;
     }
 
-    public function showItemsColor(string | Closure $color): static
+    public function showItemsColor(string|Closure $color): static
     {
         $this->showItemsColor = $color;
 
@@ -80,9 +80,9 @@ class ActivitySection extends Entry
         return $this->evaluate($this->description);
     }
 
-    public function getShowItemsCount(): int | null
+    public function getShowItemsCount(): ?int
     {
-        $showItemsCount =  $this->evaluate($this->showItemsCount);
+        $showItemsCount = $this->evaluate($this->showItemsCount);
 
         if ($showItemsCount == 0) {
             return null;
@@ -111,7 +111,7 @@ class ActivitySection extends Entry
      */
     public function getChildComponentContainers(bool $withHidden = false): array
     {
-        if ((!$withHidden) && $this->isHidden()) {
+        if ((! $withHidden) && $this->isHidden()) {
             return [];
         }
 
