@@ -63,6 +63,9 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
             ]
         ])
         ->schema([
+        	/*
+        	You should enclose the entire component within a personalized "ActivitySection" section. This section functions identically to the repeater field; you simply have to provide the array state's key.
+        	 */
             ActivitySection::make('activities')
                 ->label('My Activities')
                 ->description('These are the activities that have been recorded.')
