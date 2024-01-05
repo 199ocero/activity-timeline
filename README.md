@@ -3,7 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/jaocero/activity-timeline.svg?style=flat-square)](https://packagist.org/packages/jaocero/activity-timeline)
 [![Total Downloads](https://img.shields.io/packagist/dt/jaocero/activity-timeline.svg?style=flat-square)](https://packagist.org/packages/jaocero/activity-timeline)
 
-TActivity Timeline plugin conveniently presents upcoming, ongoing, and past activities, offering a comprehensive view of events.
+Activity Timeline plugin conveniently presents upcoming, ongoing, and past activities, offering a comprehensive view of events.
 
 ## Installation
 
@@ -28,7 +28,7 @@ content: [
 ```
 
 ## Usage
-Currently, this plugin is exclusively accessible within the Infolists builder. Below is the code demonstrating its usage. Also, it solely functions with ->state([]) and doesn't yet support the use of ->record().
+Currently, this plugin is exclusively accessible within the Infolists builder. Below is the code demonstrating its usage. Also, it solely functions with `->state([])` and doesn't yet support the use of `->record()`.
 
 ```php
 public function activityTimelineInfolist(Infolist $infolist): Infolist
@@ -101,10 +101,10 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
                     ActivityDescription::make('description')
                         ->placeholder('No description is set'),
                 ])
-                ->showItemsCount(2)
-                ->showItemsLabel('View Old')
-                ->showItemsIcon('heroicon-m-chevron-down')
-                ->showItemsColor('gray')
+                ->showItemsCount(2) // Show up to 2 items
+                ->showItemsLabel('View Old') // Show "View Old" as link label
+                ->showItemsIcon('heroicon-m-chevron-down') // Show button icon
+                ->showItemsColor('gray') // Show button color and it supports all colors
                 ->aside(true)
         ]);
 }
