@@ -1,5 +1,7 @@
 # Activity Timeline
 
+![Header](https://raw.githubusercontent.com/199ocero/activity-timeline/main/art/images/jaocero-activity-timeline.jpg)
+
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/jaocero/activity-timeline.svg?style=flat-square)](https://packagist.org/packages/jaocero/activity-timeline)
 [![Total Downloads](https://img.shields.io/packagist/dt/jaocero/activity-timeline.svg?style=flat-square)](https://packagist.org/packages/jaocero/activity-timeline)
 
