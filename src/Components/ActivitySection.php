@@ -6,7 +6,6 @@ use Closure;
 use Filament\Infolists\ComponentContainer;
 use Filament\Infolists\Components\Entry;
 use Illuminate\Database\Eloquent\Model;
-use JaOcero\ActivityTimeline\Enums\Direction;
 
 class ActivitySection extends Entry
 {
