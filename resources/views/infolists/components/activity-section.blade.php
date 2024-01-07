@@ -1,7 +1,3 @@
-@php
-    use Filament\Infolists\Components\IconEntry\IconEntrySize;
-    use JaOcero\ActivityTimeline\Enums\Direction;
-@endphp
 <x-filament::section :aside="$isAside()">
     <x-slot name="heading">
         {{ $getLabel() ?? $getHeading() }}
@@ -23,7 +19,6 @@
                 @php
                     $activityComponents = [
                         'activityIcon' => null,
-                        'activityBadge' => null,
                         'activityTitle' => null,
                         'activityDate' => null,
                         'activityDescription' => null,
@@ -43,55 +38,38 @@
                 <div x-show="@js($index) < totalShowItemsCount" :key="@js(rand())"
                     @class([
                         'flex flex-col',
-                        'mb-2' => !$loop->last,
-                        'mb-0' => $loop->last,
                     ])>
-                    <!-- Date -->
-                    {{ $activityDate }}
-                    <!-- End Date -->
-
                     <!-- Item -->
-                    <div class="flex gap-x-3">
+                      <div class="flex gap-x-3">
                         <!-- Icon -->
-                        @if($activityIcon)
-                            {{ $activityIcon }}
-                        @else
-                            <div
-                                class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-gray-700">
-                                <div @class([
-                                    'relative z-10 flex items-center justify-center',
-                                    match (IconEntrySize::Medium) {
-                                        IconEntrySize::Small, 'sm' => 'w-7 h-7',
-                                        IconEntrySize::Medium, 'md' => 'w-8 h-8',
-                                        IconEntrySize::Large, 'lg' => 'w-9 h-9',
-                                        default => 'w-8 h-8',
-                                    },
-                                ])>
-                                    <div class="w-2 h-2 bg-gray-400 rounded-full dark:bg-gray-600"></div>
-                                </div>
-                            </div>
-                        @endif
+                        <div @class([
+                                "relative last:after:hidden",
+                                "after:absolute after:top-7 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-gray-300 dark:after:bg-gray-700" => !$loop->last
+                            ])>
+                            {{ $activityIcon}}
+                        </div>
                         <!-- End Icon -->
 
                         <!-- Right Content -->
-                        <div class='mb-5 space-y-1 grow'>
-                            {{-- Bagde --}}
-                            @if ($activityBadge)
-                                <div class="flex">
-                                    {{ $activityBadge }}
-                                </div>
-                            @endif
-                            {{-- End Badge --}}
-                            {{-- Title --}}
-                            {{ $activityTitle }}
-                            {{-- End Title --}}
+                        <div @class([
+                                "grow pt-1 space-y-1",
+                                "mb-7" => !$loop->last,
+                                "mb-0" => $loop->last
+                        ])>
+                            <div class="flex justify-between items-center space-x-5">
+                                <!-- Title -->
+                                {{ $activityTitle }}
+                                <!-- End Title -->
+                                {{-- Date --}}
+                                {{ $activityDate }}
+                                {{-- End Date --}}
+                            </div>
                             {{-- Description --}}
                             {{ $activityDescription }}
                             {{-- End Description --}}
                         </div>
                         <!-- End Right Content -->
-                    </div>
-                    <!-- End Item -->
+                      </div>
                 </div>
                 <!-- End Timeline -->
             @endforeach
