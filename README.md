@@ -76,29 +76,29 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
                 ->description('These are the activities that have been recorded.')
                 ->schema([
                     ActivityTitle::make('title')
-                            ->placeholder('No title is set')
-                            ->allowHtml(),
-                        ActivityDescription::make('description')
-                            ->placeholder('No description is set')
-                            ->allowHtml(),
-                        ActivityDate::make('created_at')
-                            ->date('F j, Y', 'Asia/Manila')
-                            ->placeholder('No date is set.'),
-                        ActivityIcon::make('status')
-                            ->icon(fn (string | null $state): string | null => match ($state) {
-                                'ideation' => 'heroicon-m-light-bulb',
-                                'drafting' => 'heroicon-m-bolt',
-                                'reviewing' => 'heroicon-m-document-magnifying-glass',
-                                'published' => 'heroicon-m-rocket-launch',
-                                default => null,
-                            })
-                            ->color(fn (string | null $state): string | null => match ($state) {
-                                'ideation' => 'purple',
-                                'drafting' => 'info',
-                                'reviewing' => 'warning',
-                                'published' => 'success',
-                                default => 'gray',
-                            }),
+                        ->placeholder('No title is set')
+                        ->allowHtml(),
+                    ActivityDescription::make('description')
+                        ->placeholder('No description is set')
+                        ->allowHtml(),
+                    ActivityDate::make('created_at')
+                        ->date('F j, Y', 'Asia/Manila')
+                        ->placeholder('No date is set.'),
+                    ActivityIcon::make('status')
+                        ->icon(fn (string | null $state): string | null => match ($state) {
+                            'ideation' => 'heroicon-m-light-bulb',
+                            'drafting' => 'heroicon-m-bolt',
+                            'reviewing' => 'heroicon-m-document-magnifying-glass',
+                            'published' => 'heroicon-m-rocket-launch',
+                            default => null,
+                        })
+                        ->color(fn (string | null $state): string | null => match ($state) {
+                            'ideation' => 'purple',
+                            'drafting' => 'info',
+                            'reviewing' => 'warning',
+                            'published' => 'success',
+                            default => 'gray',
+                        }),
                 ])
                 ->showItemsCount(2) // Show up to 2 items
                 ->showItemsLabel('View Old') // Show "View Old" as link label
