@@ -77,7 +77,7 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
                 ->schema([
                     ActivityTitle::make('title')
                         ->placeholder('No title is set')
-                        ->allowHtml(),
+                        ->allowHtml(), // Be aware that you will need to ensure that the HTML is safe to render, otherwise your application will be vulnerable to XSS attacks.
                     ActivityDescription::make('description')
                         ->placeholder('No description is set')
                         ->allowHtml(),
