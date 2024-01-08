@@ -17,20 +17,19 @@ composer require jaocero/activity-timeline
 
 To adhere to Filament's theming approach, you'll be required to employ a personalized theme in order to utilize this plugin.
 
-> **Custom Theme Installation**
-> [Filament Docs](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme)
+> **Custom Theme Installation** > [Filament Docs](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme)
 
 Add the plugin's views to your `tailwind.config.js` file.
 
 ```js
 content: [
-    ...
-    './vendor/jaocero/activity-timeline/resources/views/**/*.blade.php',
+    ...'./vendor/jaocero/activity-timeline/resources/views/**/*.blade.php',
 ]
 ```
 
 ## Usage
-Currently, this plugin is exclusively accessible within the Infolists builder. Below is the code demonstrating its usage. Also, it solely functions with `->state([])` and doesn't yet support the use of `->record()`.
+
+This plugin is already accessible within the Infolists builder and now supports both the `->state([])` and `->record()` methods.
 
 ```php
 public function activityTimelineInfolist(Infolist $infolist): Infolist
@@ -39,7 +38,7 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
         ->state([
             'activities' => [
                     [
-                        'title' => "Published Article 🔥 - <span class='dark:text-success-400 text-success-600 italic font-normal'>Published with Laravel Filament and Tailwind CSS</span>",
+                        'title' => "Published Article 🔥 - <span class='italic font-normal dark:text-success-400 text-success-600'>Published with Laravel Filament and Tailwind CSS</span>",
                         'description' => "<span>Approved and published. Here is the <a href='#' class='font-bold hover:underline dark:text-orange-300'>link.</a></span>",
                         'status' => 'published',
                         'created_at' => now()->addDays(8),
@@ -51,7 +50,7 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
                         'created_at' => now()->addDays(5),
                     ],
                     [
-                        'title' => "Drafting Article - <span class='font-normal italic dark:text-purple-300 text-purple-800 text-sm'>Make it ready for review</span>",
+                        'title' => "Drafting Article - <span class='text-sm italic font-normal text-purple-800 dark:text-purple-300'>Make it ready for review</span>",
                         'description' => 'Drafting the article and making it ready for review.',
                         'status' => 'drafting',
                         'created_at' => now()->addDays(2),
@@ -108,6 +107,25 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
         ]);
 }
 ```
+
+When utilizing the `->record()` function, you provide your model in a manner similar to the code showcased below:
+
+```php
+protected $activities;
+
+public function __construct()
+{
+    $this->activities = User::query()->with('activities')->where('id', auth()->user()->id)->first();
+}
+
+public function activityTimelineInfolist(Infolist $infolist): Infolist
+{
+    return $infolist
+        ->record($this->activities)
+        // ... remaining code
+}
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
@@ -122,8 +140,8 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Jay-Are Ocero](https://github.com/199ocero)
-- [All Contributors](../../contributors)
+-   [Jay-Are Ocero](https://github.com/199ocero)
+-   [All Contributors](../../contributors)
 
 ## License
 
