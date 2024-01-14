@@ -136,11 +136,16 @@ Sometimes, when we don't have any info to show to users, it's important to impro
 public function activityTimelineInfolist(Infolist $infolist): Infolist
 {
     return $infolist
-        ->aside(true)
-        // ...
-        ->emptyStateHeading('No activities yet.')
-        ->emptyStateDescription('Check back later for activities that have been recorded.')
-        ->emptyStateIcon('heroicon-o-bolt-slash')
+        ->state([
+            'activities' => []
+        )]
+        ->schema([
+            ActivitySection::make('activities')
+                // ... other code
+                ->emptyStateHeading('No activities yet.')
+                ->emptyStateDescription('Check back later for activities that have been recorded.')
+                ->emptyStateIcon('heroicon-o-bolt-slash')
+        ])
 }
 ```
 
