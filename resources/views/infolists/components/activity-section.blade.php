@@ -36,27 +36,25 @@
 
                 <!-- Timeline -->
                 <div x-show="@js($index) < totalShowItemsCount" :key="@js(rand())"
-                    @class([
-                        'flex flex-col',
-                    ])>
+                    @class(['flex flex-col'])>
                     <!-- Item -->
-                      <div class="flex gap-x-3">
+                    <div class="flex gap-x-3">
                         <!-- Icon -->
                         <div @class([
-                                "relative last:after:hidden",
-                                "after:absolute after:top-7 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-gray-300 dark:after:bg-gray-700" => !$loop->last
-                            ])>
-                            {{ $activityIcon}}
+                            'relative last:after:hidden',
+                            'after:absolute after:top-7 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-gray-300 dark:after:bg-gray-700' => !$loop->last,
+                        ])>
+                            {{ $activityIcon }}
                         </div>
                         <!-- End Icon -->
 
                         <!-- Right Content -->
                         <div @class([
-                                "grow pt-1 space-y-1",
-                                "mb-7" => !$loop->last,
-                                "mb-0" => $loop->last
+                            'grow pt-1 space-y-1',
+                            'mb-7' => !$loop->last,
+                            'mb-0' => $loop->last,
                         ])>
-                            <div class="flex justify-between items-center space-x-5">
+                            <div class="flex items-center justify-between space-x-5">
                                 <!-- Title -->
                                 {{ $activityTitle }}
                                 <!-- End Title -->
@@ -69,7 +67,7 @@
                             {{-- End Description --}}
                         </div>
                         <!-- End Right Content -->
-                      </div>
+                    </div>
                 </div>
                 <!-- End Timeline -->
             @endforeach
@@ -88,5 +86,7 @@
             </div>
             <!-- End Show More -->
         </div>
+    @else
+        <x-activity-timeline::empty-state :description="$getEmptyStateDescription()" :heading="$getEmptyStateHeading()" :icon="$getEmptyStateIcon()" />
     @endif
 </x-filament::section>
