@@ -130,6 +130,19 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
 }
 ```
 
+Sometimes, when we don't have any info to show to users, it's important to improve their experience by displaying something. So, I include an empty state, like the one in the [Filament Table Empty State](https://filamentphp.com/docs/3.x/tables/empty-state).
+
+```php
+public function activityTimelineInfolist(Infolist $infolist): Infolist
+{
+    return $infolist
+        ->aside(true)
+        // ...
+        ->emptyStateHeading('No activities yet.')
+        ->emptyStateDescription('Check back later for activities that have been recorded.')
+        ->emptyStateIcon('heroicon-o-bolt-slash')
+}
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
@@ -150,3 +163,4 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+```

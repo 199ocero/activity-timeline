@@ -6,9 +6,12 @@ use Closure;
 use Filament\Infolists\ComponentContainer;
 use Filament\Infolists\Components\Entry;
 use Illuminate\Database\Eloquent\Model;
+use JaOcero\ActivityTimeline\Concerns\HasEmptyState;
 
 class ActivitySection extends Entry
 {
+    use HasEmptyState;
+
     protected string $view = 'activity-timeline::infolists.components.activity-section';
 
     protected string|Closure|null $description = null;
@@ -106,7 +109,7 @@ class ActivitySection extends Entry
      */
     public function getChildComponentContainers(bool $withHidden = false): array
     {
-        if ((! $withHidden) && $this->isHidden()) {
+        if ((!$withHidden) && $this->isHidden()) {
             return [];
         }
 
