@@ -142,6 +142,7 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
         ->emptyStateDescription('Check back later for activities that have been recorded.')
         ->emptyStateIcon('heroicon-o-bolt-slash')
 }
+```
 
 ## Changelog
 
