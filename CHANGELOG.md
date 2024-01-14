@@ -2,6 +2,14 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.1.0 - 2024-01-14
+
+### What's Changed
+
+* Added empty state by @199ocero in https://github.com/199ocero/activity-timeline/pull/8
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.0.2...v1.1.0
+
 ## v1.0.2 - 2024-01-08
 
 ### What's Changed
