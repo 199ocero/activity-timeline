@@ -2,6 +2,14 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.0 - 2024-01-17
+
+### What's Changed
+
+* adding support for spatie activity log by @199ocero in https://github.com/199ocero/activity-timeline/pull/9
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.1.0...v1.2.0
+
 ## v1.1.0 - 2024-01-14
 
 ### What's Changed
