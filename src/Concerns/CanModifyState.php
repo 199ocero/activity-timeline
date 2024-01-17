@@ -7,7 +7,6 @@ use Illuminate\Support\HtmlString;
 
 trait CanModifyState
 {
-
     protected $state;
 
     public function modifyState(Closure $callback): static
@@ -17,7 +16,7 @@ trait CanModifyState
         return $this;
     }
 
-    public function getModifiedState(): HtmlString | null
+    public function getModifiedState(): ?HtmlString
     {
         return $this->evaluate($this->state);
     }

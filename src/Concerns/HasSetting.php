@@ -2,20 +2,15 @@
 
 namespace JaOcero\ActivityTimeline\Concerns;
 
-use Livewire\Livewire;
-use Filament\Forms\Get;
-use Illuminate\Support\Str;
 use Filament\Infolists\Infolist;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\HtmlString;
-use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Str;
 use JaOcero\ActivityTimeline\Components\ActivityDate;
-use JaOcero\ActivityTimeline\Components\ActivityIcon;
-use JaOcero\ActivityTimeline\Components\ActivityTitle;
-use JaOcero\ActivityTimeline\Components\ActivitySection;
 use JaOcero\ActivityTimeline\Components\ActivityDescription;
+use JaOcero\ActivityTimeline\Components\ActivityIcon;
+use JaOcero\ActivityTimeline\Components\ActivitySection;
+use JaOcero\ActivityTimeline\Components\ActivityTitle;
 
 trait HasSetting
 {
@@ -48,13 +43,13 @@ trait HasSetting
                 'placeholder' => 'No date is set',
             ],
             'activity_icon' => [
-                'icon' => fn (string | null $state): string | null => match ($state) {
+                'icon' => fn (?string $state): ?string => match ($state) {
                     default => null
                 },
-                'color' => fn (string | null $state): string | null => match ($state) {
+                'color' => fn (?string $state): ?string => match ($state) {
                     default => null
                 },
-            ]
+            ],
         ];
     }
 
@@ -145,17 +140,19 @@ trait HasSetting
                     if ($state['description'] == $state['event']) {
                         $className = Str::lower(Str::snake(class_basename($state['subject']), ' '));
                         $causerName = $state['causer']->name ?? $state['causer']->first_name ?? $state['causer']->last_name ?? $state['causer']->username ?? 'Unknown';
-                        return new HtmlString(sprintf("The <strong>%s</strong> was <strong>%s</strong> by <strong>%s</strong>.", $className, $state['event'], $causerName));
+
+                        return new HtmlString(sprintf('The <strong>%s</strong> was <strong>%s</strong> by <strong>%s</strong>.', $className, $state['event'], $causerName));
                     }
+
                     return new HtmlString($state['description']);
-                }
+                },
             ],
             'activity_description' => [
                 'modify_state' => function (array $state) {
 
                     $properties = $state['properties'];
 
-                    if (!empty($properties) && isset($properties['old']) && isset($properties['attributes'])) {
+                    if (! empty($properties) && isset($properties['old']) && isset($properties['attributes'])) {
 
                         $oldValues = $properties['old'];
                         $newValues = $properties['attributes'];
@@ -164,18 +161,18 @@ trait HasSetting
 
                         foreach ($newValues as $key => $newValue) {
                             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
-                                $changes[] = "- {$key} from <strong>" . htmlspecialchars($oldValues[$key]) . "</strong> to <strong>" . htmlspecialchars($newValue) . "</strong>";
+                                $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValues[$key]).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
                             }
                         }
 
                         $causerName = $state['causer']->name ?? $state['causer']->first_name ?? $state['causer']->last_name ?? $state['causer']->username ?? 'Unknown';
-                        return new HtmlString(sprintf("%s %s the following: <br>%s", $causerName, $state['event'], implode('<br>', $changes)));
+
+                        return new HtmlString(sprintf('%s %s the following: <br>%s', $causerName, $state['event'], implode('<br>', $changes)));
                     }
 
-
                     return null;
-                }
-            ]
+                },
+            ],
         ];
     }
 }
