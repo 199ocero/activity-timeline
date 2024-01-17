@@ -149,6 +149,177 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
 }
 ```
 
+## Usage with Spatie Activity Log Package
+
+This plugin works with [spatie/laravel-activitylog](https://github.com/spatie/laravel-activitylog), making it easy to log user actions in your app. It can also automatically log model events, storing everything in the `activity_log` table. To use the plugin, just install `spatie/laravel-activitylog`, set it up, and you're good to go.
+
+### Creating a Custom Page
+
+You are required to create a custom page within your `resources` to display all activities based on the record passed to the route.
+
+```php
+php artisan make:filament-page ViewOrderActivities --resource=OrderResource --type=custom
+```
+
+### Including the Page in your Resource Class
+
+Simply include the custom page in the `getPages()` method so that we can access it.
+
+```php
+public static function getPages(): array
+{
+    return [
+        // ... other pages
+        // The format of route doesn't matter, as long as it includes the route parameter {record}.
+        'activities' => Pages\ViewOrderActivities::route('/order/{record}/activities'),
+    ];
+}
+```
+
+In the `actions` method of your table, include an additional custom action. This action should redirect users to the custom page we've generated earlier.
+
+```php
+public static function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            // ...
+        ])
+        ->filters([
+            // ...
+        ])
+        ->actions([
+            Tables\Actions\Action::make('view_activities')
+                ->label('Activities')
+                ->icon('heroicon-m-bolt')
+                ->color('purple')
+                ->url(fn ($record) => OrderResource::getUrl('activities', ['record' => $record])),
+        ])
+        ->bulkActions([
+            // ...
+        ]);
+}
+```
+
+### Setting up your Custom Page
+
+Changes are needed in your custom page. Instead of extending using the regular `Page` class will make use of a specific class called `ActivityTimelinePage` provided by the plugin. Additionally, you should include your resource class.
+
+```php
+use App\Filament\Resources\OrderResource;
+use JaOcero\ActivityTimeline\Pages\ActivityTimelinePage;
+
+class ViewOrderActivities extends ActivityTimelinePage
+{
+    protected static string $resource = OrderResource::class;
+}
+```
+
+### Configuration
+
+Behind the scenes, the plugin utilizes the previously mentioned infolists entry. We only modify the properties/data, but the logic remains unchanged.
+
+```php
+use App\Filament\Resources\OrderResource;
+use JaOcero\ActivityTimeline\Pages\ActivityTimelinePage;
+
+class ViewOrderActivities extends ActivityTimelinePage
+{
+    protected static string $resource = OrderResource::class;
+
+    protected function configuration(): array
+    {
+        return [
+            'activity_section' => [
+                'label' => 'Activities', // label for the section
+                'description' => 'These are the activities that have been recorded.', // description for the section
+                'show_items_count' => 0, // show the number of items to be shown
+                'show_items_label' => 'Show more', // show button label
+                'show_items_icon' => 'heroicon-o-chevron-down', // show button icon,
+                'show_items_color' => 'gray', // show button color,
+                'aside' => true, // show the section in the aside
+                'empty_state_heading' => 'No activities yet', // heading for the empty state
+                'empty_state_description' => 'Check back later for activities that have been recorded.', // description for the empty state
+                'empty_state_icon' => 'heroicon-o-bolt-slash', // icon for the empty state
+            ],
+            'activity_title' => [
+                'placeholder' => 'No title is set', // this will show when there is no title
+                'allow_html' => true, // set true to allow html in the title
+
+                /**
+                 * You are free to adjust the state before displaying it on your page.
+                 * Take note that the state returns these data below:
+                 *      [
+                 *       'log_name' => $activity->log_name,
+                  *      'description' => $activity->description,
+                  *      'subject' => $activity->subject,
+                  *      'event' => $activity->event,
+                  *      'causer' => $activity->causer,
+                  *      'properties' => json_decode($activity->properties, true),
+                  *      'batch_uuid' => $activity->batch_uuid,
+                  *     ]
+
+                  * If you wish to make modifications, please refer to the default code in the HasSetting trait.
+                 */
+
+                // 'modify_state' => function (array $state) {
+                //
+                // }
+
+            ],
+            'activity_description' => [
+                'placeholder' => 'No description is set', // this will show when there is no description
+                'allow_html' => true, // set true to allow html in the description
+
+                /**
+                 * You are free to adjust the state before displaying it on your page.
+                 * Take note that the state returns these data below:
+                 *      [
+                 *       'log_name' => $activity->log_name,
+                  *      'description' => $activity->description,
+                  *      'subject' => $activity->subject,
+                  *      'event' => $activity->event,
+                  *      'causer' => $activity->causer,
+                  *      'properties' => json_decode($activity->properties, true),
+                  *      'batch_uuid' => $activity->batch_uuid,
+                  *     ]
+
+                  * If you wish to make modifications, please refer to the default code in the HasSetting trait.
+                 */
+
+                // 'modify_state' => function (array $state) {
+                //
+                // }
+
+            ],
+            'activity_date' => [
+                'name' => 'created_at', // or updated_at
+                'date' => 'F j, Y g:i A', // date format
+                'placeholder' => 'No date is set', // this will show when there is no date
+            ],
+            'activity_icon' => [
+                'icon' => fn (string | null $state): string | null => match ($state) {
+                    /**
+                     * 'event_name' => 'heroicon-o-calendar',
+                     * ... and more
+                     */
+                    default => null
+                },
+                'color' => fn (string | null $state): string | null => match ($state) {
+                    /**
+                     * 'event_name' => 'primary',
+                     * ... and more
+                     */
+                    default => null
+                },
+            ]
+        ];
+    }
+}
+```
+
+That's all! If you encounter any issues or have features you'd like to discuss, feel free to chat with me in our Discord channel.
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
@@ -169,4 +340,3 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-```
