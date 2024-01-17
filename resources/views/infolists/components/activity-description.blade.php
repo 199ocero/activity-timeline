@@ -1,7 +1,7 @@
 <p class="text-sm text-gray-600 dark:text-gray-400">
     @if ($isHtmlAllowed())
-        {!! $getState() ?? $getPlaceholder() !!}
+        {!! $getModifiedState() ?? (!is_array($getState()) ? $getState() ?? $getPlaceholder() : null) !!}
     @else
-        {{ $getState() ?? $getPlaceholder() }}
+        {{ $getModifiedState() ?? (!is_array($getState()) ? $getState() ?? $getPlaceholder() : null) }}
     @endif
 </p>

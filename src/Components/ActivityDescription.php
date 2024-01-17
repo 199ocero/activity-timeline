@@ -4,10 +4,11 @@ namespace JaOcero\ActivityTimeline\Components;
 
 use Filament\Forms\Components\Concerns\CanAllowHtml;
 use Filament\Infolists\Components\Entry;
+use JaOcero\ActivityTimeline\Concerns\CanModifyState;
 
 class ActivityDescription extends Entry
 {
-    use CanAllowHtml;
+    use CanAllowHtml, CanModifyState;
 
     protected string $viewIdentifier = 'activityDescription';
 

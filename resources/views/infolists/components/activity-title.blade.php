@@ -1,7 +1,7 @@
-<h3 class="text-base font-semibold text-gray-800 dark:text-white">
+<h3 class="text-base text-gray-800 dark:text-white">
     @if ($isHtmlAllowed())
-        {!! $getState() ?? $getPlaceholder() !!}
+        {!! $getModifiedState() ?? (!is_array($getState()) ? $getState() ?? $getPlaceholder() : null) !!}
     @else
-        {{ $getState() ?? $getPlaceholder() }}
+        {{ $getModifiedState() ?? (!is_array($getState()) ? $getState() ?? $getPlaceholder() : null) }}
     @endif
 </h3>
