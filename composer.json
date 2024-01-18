@@ -1,6 +1,6 @@
 {
     "name": "jaocero/activity-timeline",
-    "description": "Activity Timeline plugin conveniently presents upcoming, ongoing, and past activities, offering a comprehensive view of events.",
+    "description": "Add timelines to custom pages or infolist entries effortlessly. Plus, it teams up smoothly with Spatie Activitylog for easy tracking.",
     "keywords": [
         "jaocero",
         "laravel",
