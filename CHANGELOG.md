@@ -2,6 +2,14 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.1 - 2024-01-19
+
+### What's Changed
+
+* added css hook classes and minor bug fixes by @199ocero in https://github.com/199ocero/activity-timeline/pull/12
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.0...v1.2.1
+
 ## v1.2.0 - 2024-01-17
 
 ### What's Changed
