@@ -318,6 +318,18 @@ class ViewOrderActivities extends ActivityTimelinePage
 }
 ```
 
+## Style customization
+
+Similar to Filament, this plugin also includes CSS `hook` classes that enable the customization of different HTML elements through CSS.
+
+```css
+.fi-timeline-section {
+    @apply background-transparent !important;
+}
+```
+
+This plugin comes with numerous CSS `hook` classes. For a straightforward approach, consider using your browser's developer tools to carefully examine the element and identify these classes.
+
 That's all! If you encounter any issues or have features you'd like to discuss, feel free to chat with me in our Discord channel.
 
 ## Changelog
