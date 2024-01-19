@@ -324,7 +324,7 @@ Similar to Filament, this plugin also includes CSS `hook` classes that enable th
 
 ```css
 .fi-timeline-section {
-    @apply background-transparent !important;
+    @apply bg-transparent !important;
 }
 ```
 
