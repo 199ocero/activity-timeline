@@ -1,10 +1,10 @@
-<x-filament::section :aside="$isAside()">
+<x-activity-timeline::section :aside="$isAside()">
     <x-slot name="heading">
         {{ $getLabel() ?? $getHeading() }}
     </x-slot>
 
     <x-slot name="description">
-        {{ $getDescription() ?? '' }}
+        {{ $getDescription() }}
     </x-slot>
 
     @if (count($childComponentContainers = $getChildComponentContainers()) &&
@@ -34,45 +34,45 @@
                     extract($activityComponents);
                 @endphp
 
-                <!-- Timeline -->
+
                 <div x-show="@js($index) < totalShowItemsCount" :key="@js(rand())"
                     @class(['flex flex-col'])>
-                    <!-- Item -->
+
                     <div class="flex gap-x-3">
-                        <!-- Icon -->
+
                         <div @class([
                             'relative last:after:hidden',
                             'after:absolute after:top-7 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-gray-300 dark:after:bg-gray-700' => !$loop->last,
                         ])>
                             {{ $activityIcon }}
                         </div>
-                        <!-- End Icon -->
 
-                        <!-- Right Content -->
                         <div @class([
+                            'fi-timeline-item',
                             'grow pt-1 space-y-1',
                             'mb-7' => !$loop->last,
                             'mb-0' => $loop->last,
                         ])>
-                            <div class="flex items-center justify-between space-x-5">
-                                <!-- Title -->
+                            <div @class([
+                                'fi-timeline-item-heading flex',
+                                'flex-col items-start space-y-1 md:space-y-0 md:items-center md:flex-row md:justify-between md:space-x-5' => !$isAside(),
+                                'flex-col items-start space-y-1 lg:space-y-0 lg:items-center lg:flex-row lg:justify-between lg:space-x-5' => $isAside(),
+                            ])>
+
                                 {{ $activityTitle }}
-                                <!-- End Title -->
-                                {{-- Date --}}
+
                                 {{ $activityDate }}
-                                {{-- End Date --}}
+
                             </div>
-                            {{-- Description --}}
+
                             {{ $activityDescription }}
-                            {{-- End Description --}}
+
                         </div>
-                        <!-- End Right Content -->
+
                     </div>
                 </div>
-                <!-- End Timeline -->
             @endforeach
 
-            <!-- Show More -->
             <div x-show="totalShowItemsCount < childItemsCount">
                 @php
                     $icon = $getShowItemsIcon();
@@ -84,9 +84,9 @@
                     {{ $label }}
                 </x-filament::link>
             </div>
-            <!-- End Show More -->
+
         </div>
     @else
         <x-activity-timeline::empty-state :description="$getEmptyStateDescription()" :heading="$getEmptyStateHeading()" :icon="$getEmptyStateIcon()" />
     @endif
-</x-filament::section>
+</x-activity-timeline::section>
