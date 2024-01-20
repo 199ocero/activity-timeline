@@ -2,6 +2,20 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.2 - 2024-01-20
+
+### What's Changed
+
+* improve section UI and add collapse effect by @atmonshi in https://github.com/199ocero/activity-timeline/pull/13
+* add support to pass any `extraAttributes` by @atmonshi in https://github.com/199ocero/activity-timeline/pull/14
+* added heading visible and docu by @199ocero in https://github.com/199ocero/activity-timeline/pull/15
+
+### New Contributors
+
+* @atmonshi made their first contribution in https://github.com/199ocero/activity-timeline/pull/13
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.1...v1.2.2
+
 ## v1.2.1 - 2024-01-19
 
 ### What's Changed
