@@ -1,10 +1,17 @@
-@props(['heading', 'description' => null, 'aside' => true])
+@props(['heading', 'description' => null, 'aside' => true, 'extraAttributes' => []])
 
-<section @class([
-    'fi-timeline-section',
-    'bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10' => !$aside,
-    'grid items-start grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-3' => $aside,
-])>
+<section
+    {{
+        $attributes
+            ->merge($extraAttributes, escape: false)
+            ->class([
+                'fi-timeline-section',
+                match (true) {
+                    !$aside => 'bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10',
+                    $aside => 'grid items-start grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-3',
+                },
+            ])
+    }}>
     <header @class([
         'fi-timeline-section-header',
         'flex flex-col gap-3 px-6 py-4 overflow-hidden sm:flex-row sm:items-center' => !$aside,

@@ -1,4 +1,4 @@
-<x-activity-timeline::section :aside="$isAside()">
+<x-activity-timeline::section :aside="$isAside()" :extraAttributes="$getExtraAttributes()">
     <x-slot name="heading">
         {{ $getLabel() ?? $getHeading() }}
     </x-slot>
