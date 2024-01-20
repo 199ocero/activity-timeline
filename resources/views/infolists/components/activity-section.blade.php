@@ -35,14 +35,14 @@
                 @endphp
 
 
-                <div x-show="@js($index) < totalShowItemsCount" :key="@js(rand())"
+                <div x-show="@js($index) < totalShowItemsCount" x-collapse :key="@js(rand())"
                     @class(['flex flex-col'])>
 
                     <div class="flex gap-x-3">
 
                         <div @class([
                             'relative last:after:hidden',
-                            'after:absolute after:top-7 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-gray-300 dark:after:bg-gray-700' => !$loop->last,
+                            'after:absolute after:top-8 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-gray-300 dark:after:bg-gray-700' => !$loop->last,
                         ])>
                             {{ $activityIcon }}
                         </div>
@@ -80,7 +80,7 @@
                     $color = $getShowItemsColor();
                 @endphp
                 <x-filament::link x-on:click="totalShowItemsCount += showItemsCount" :icon="$icon" :color="$color"
-                    class="cursor-pointer hover:underline">
+                    class="ms-1.5 cursor-pointer hover:underline">
                     {{ $label }}
                 </x-filament::link>
             </div>
