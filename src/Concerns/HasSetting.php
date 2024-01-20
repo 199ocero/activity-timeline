@@ -156,7 +156,7 @@ trait HasSetting
 
                     $properties = $state['properties'];
 
-                    if (!empty($properties) && isset($properties['old']) && isset($properties['attributes'])) {
+                    if (! empty($properties) && isset($properties['old']) && isset($properties['attributes'])) {
 
                         $oldValues = $properties['old'];
                         $newValues = $properties['attributes'];
@@ -165,7 +165,7 @@ trait HasSetting
 
                         foreach ($newValues as $key => $newValue) {
                             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
-                                $changes[] = "- {$key} from <strong>" . htmlspecialchars($oldValues[$key]) . '</strong> to <strong>' . htmlspecialchars($newValue) . '</strong>';
+                                $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValues[$key]).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
                             }
                         }
 

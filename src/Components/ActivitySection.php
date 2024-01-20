@@ -123,7 +123,7 @@ class ActivitySection extends Entry
      */
     public function getChildComponentContainers(bool $withHidden = false): array
     {
-        if ((!$withHidden) && $this->isHidden()) {
+        if ((! $withHidden) && $this->isHidden()) {
             return [];
         }
 
