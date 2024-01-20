@@ -108,6 +108,8 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
                 ->showItemsIcon('heroicon-m-chevron-down') // Show button icon
                 ->showItemsColor('gray') // Show button color and it supports all colors
                 ->aside(true)
+                ->headingVisible(true) // make heading visible or not
+                ->extraAttributes(['class'=>'my-new-class']) // add extra class
         ]);
 }
 ```
@@ -241,6 +243,8 @@ class ViewOrderActivities extends ActivityTimelinePage
                 'empty_state_heading' => 'No activities yet', // heading for the empty state
                 'empty_state_description' => 'Check back later for activities that have been recorded.', // description for the empty state
                 'empty_state_icon' => 'heroicon-o-bolt-slash', // icon for the empty state
+                'heading_visible' => true, // show the heading
+                'extra_attributes' => [], // extra attributes
             ],
             'activity_title' => [
                 'placeholder' => 'No title is set', // this will show when there is no title

@@ -26,6 +26,8 @@ class ActivitySection extends Entry
 
     protected bool|Closure|null $isAside = null;
 
+    protected bool|Closure|null $isHeadingVisible = null;
+
     public function description(string|Closure|null $description = null): static
     {
         $this->description = $description;
@@ -68,6 +70,13 @@ class ActivitySection extends Entry
         return $this;
     }
 
+    public function headingVisible(bool|Closure|null $condition = true): static
+    {
+        $this->isHeadingVisible = $condition;
+
+        return $this;
+    }
+
     public function isAside(): bool
     {
         return (bool) ($this->evaluate($this->isAside) ?? false);
@@ -104,12 +113,17 @@ class ActivitySection extends Entry
         return $this->evaluate($this->showItemsColor) ?? 'gray';
     }
 
+    public function isHeadingVisible(): bool
+    {
+        return (bool) ($this->evaluate($this->isHeadingVisible) ?? true);
+    }
+
     /**
      * @return array<ComponentContainer>
      */
     public function getChildComponentContainers(bool $withHidden = false): array
     {
-        if ((! $withHidden) && $this->isHidden()) {
+        if ((!$withHidden) && $this->isHidden()) {
             return [];
         }
 

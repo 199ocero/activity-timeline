@@ -28,6 +28,8 @@ trait HasSetting
                 'empty_state_heading' => 'No activities yet',
                 'empty_state_description' => 'Check back later for activities that have been recorded.',
                 'empty_state_icon' => 'heroicon-o-bolt-slash',
+                'heading_visible' => true,
+                'extra_attributes' => [],
             ],
             'activity_title' => [
                 'placeholder' => 'No title is set',
@@ -97,7 +99,9 @@ trait HasSetting
                     ->aside($this->configuration()['activity_section']['aside'])
                     ->emptyStateHeading($this->configuration()['activity_section']['empty_state_heading'])
                     ->emptyStateDescription($this->configuration()['activity_section']['empty_state_description'])
-                    ->emptyStateIcon($this->configuration()['activity_section']['empty_state_icon']),
+                    ->emptyStateIcon($this->configuration()['activity_section']['empty_state_icon'])
+                    ->headingVisible($this->configuration()['activity_section']['heading_visible'])
+                    ->extraAttributes($this->configuration()['activity_section']['extra_attributes']),
             ])
             ->columns(1);
     }
@@ -152,7 +156,7 @@ trait HasSetting
 
                     $properties = $state['properties'];
 
-                    if (! empty($properties) && isset($properties['old']) && isset($properties['attributes'])) {
+                    if (!empty($properties) && isset($properties['old']) && isset($properties['attributes'])) {
 
                         $oldValues = $properties['old'];
                         $newValues = $properties['attributes'];
@@ -161,7 +165,7 @@ trait HasSetting
 
                         foreach ($newValues as $key => $newValue) {
                             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
-                                $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValues[$key]).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
+                                $changes[] = "- {$key} from <strong>" . htmlspecialchars($oldValues[$key]) . '</strong> to <strong>' . htmlspecialchars($newValue) . '</strong>';
                             }
                         }
 
