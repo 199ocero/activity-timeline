@@ -28,6 +28,10 @@ class ActivityDate extends Entry
 
     public function getDate($value): ?string
     {
+        if ($this->getStateUsing !== null) {
+            return $this->getState();
+        }
+
         $date = Carbon::parse($value)
             ->setTimezone($this->getTimezone());
 
