@@ -112,7 +112,7 @@ trait HasSetting
         $activityModel = new $activityModelClass;
 
         $activities = $activityModel::query()
-            ->with('causer')
+            ->with(['causer', 'subject'])
             ->where('subject_id', $this->record->id)
             ->where('subject_type', get_class($this->record))
             ->orderBy('created_at', 'desc')
