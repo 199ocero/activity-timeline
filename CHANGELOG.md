@@ -2,6 +2,18 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.3 - 2024-01-30
+
+### What's Changed
+
+* Eager load `subject` to prevent N+1 problem by @iRaziul in https://github.com/199ocero/activity-timeline/pull/18
+
+### New Contributors
+
+* @iRaziul made their first contribution in https://github.com/199ocero/activity-timeline/pull/18
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.2...v1.2.3
+
 ## v1.2.2 - 2024-01-20
 
 ### What's Changed
