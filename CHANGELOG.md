@@ -2,6 +2,18 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.4 - 2024-02-03
+
+### What's Changed
+
+* Moved activity query out of private function by @bilaliqbalr in https://github.com/199ocero/activity-timeline/pull/19
+
+### New Contributors
+
+* @bilaliqbalr made their first contribution in https://github.com/199ocero/activity-timeline/pull/19
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.3...v1.2.4
+
 ## v1.2.3 - 2024-01-30
 
 ### What's Changed
