@@ -106,7 +106,8 @@ trait HasSetting
             ->columns(1);
     }
 
-    protected function getActivites() : \Illuminate\Database\Eloquent\Collection {
+    protected function getActivites(): \Illuminate\Database\Eloquent\Collection
+    {
         $activityModelClass = config('activitylog.activity_model');
         $activityModel = new $activityModelClass;
 
