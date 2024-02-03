@@ -106,17 +106,21 @@ trait HasSetting
             ->columns(1);
     }
 
-    private function getActivityLogRecord(): Collection
-    {
+    protected function getActivites() : \Illuminate\Database\Eloquent\Collection {
         $activityModelClass = config('activitylog.activity_model');
         $activityModel = new $activityModelClass;
 
-        $activities = $activityModel::query()
+        return $activityModel::query()
             ->with(['causer', 'subject'])
             ->where('subject_id', $this->record->id)
             ->where('subject_type', get_class($this->record))
             ->orderBy('created_at', 'desc')
             ->get();
+    }
+
+    private function getActivityLogRecord(): Collection
+    {
+        $activities = $this->getActivites();
 
         $activities->transform(function ($activity) {
 
