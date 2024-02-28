@@ -2,6 +2,19 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.5 - 2024-02-28
+
+### What's Changed
+
+* Add CanAllowHtml and CanModifyState by @Puralogica in https://github.com/199ocero/activity-timeline/pull/20
+* add Laravel 11 support by @atmonshi in https://github.com/199ocero/activity-timeline/pull/21
+
+### New Contributors
+
+* @Puralogica made their first contribution in https://github.com/199ocero/activity-timeline/pull/20
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.4...v1.2.5
+
 ## v1.2.4 - 2024-02-03
 
 ### What's Changed
