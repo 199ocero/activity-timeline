@@ -2,11 +2,15 @@
 
 namespace JaOcero\ActivityTimeline\Components;
 
-use Filament\Infolists\Components\Entry;
 use Illuminate\Support\Carbon;
+use Filament\Infolists\Components\Entry;
+use Filament\Forms\Components\Concerns\CanAllowHtml;
+use JaOcero\ActivityTimeline\Concerns\CanModifyState;
 
 class ActivityDate extends Entry
 {
+    use CanAllowHtml, CanModifyState;
+
     protected string $viewIdentifier = 'activityDate';
 
     protected string $view = 'activity-timeline::infolists.components.activity-date';
