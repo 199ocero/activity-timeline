@@ -2,9 +2,9 @@
 
 namespace JaOcero\ActivityTimeline\Components;
 
-use Illuminate\Support\Carbon;
-use Filament\Infolists\Components\Entry;
 use Filament\Forms\Components\Concerns\CanAllowHtml;
+use Filament\Infolists\Components\Entry;
+use Illuminate\Support\Carbon;
 use JaOcero\ActivityTimeline\Concerns\CanModifyState;
 
 class ActivityDate extends Entry
