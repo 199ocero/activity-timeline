@@ -2,6 +2,18 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.6 - 2024-03-07
+
+### What's Changed
+
+* Add placeholder for null values and display logs for null to not-null changes by @RixzZ in https://github.com/199ocero/activity-timeline/pull/22
+
+### New Contributors
+
+* @RixzZ made their first contribution in https://github.com/199ocero/activity-timeline/pull/22
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.5...v1.2.6
+
 ## v1.2.5 - 2024-02-28
 
 ### What's Changed
