@@ -173,7 +173,7 @@ trait HasSetting
                             $newValue = $newValue ?? '—';
 
                             if (is_array($newValue)) {
-                                $newValue = implode(', ', $newValue);
+                                $newValue = json_encode($newValue);
                             }
                             
                             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
