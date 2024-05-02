@@ -172,6 +172,10 @@ trait HasSetting
                             $oldValues[$key] = $oldValues[$key] ?? '—';
                             $newValue = $newValue ?? '—';
 
+                            if (is_array($newValue)) {
+                                $newValue = json_encode($newValue);
+                            }
+                            
                             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
                                 $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValues[$key]).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
                             }
