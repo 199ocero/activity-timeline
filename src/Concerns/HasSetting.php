@@ -169,7 +169,7 @@ trait HasSetting
                         $changes = [];
 
                         foreach ($newValues as $key => $newValue) {
-                            $oldValues[$key] = $oldValues[$key] ?? '—';
+                            $oldValue = is_array($oldValues[$key]) ? json_encode($oldValues[$key]) : $oldValues[$key] ?? '-';
                             $newValue = $newValue ?? '—';
 
                             if (is_array($newValue)) {
@@ -177,7 +177,7 @@ trait HasSetting
                             }
 
                             if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
-                                $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValues[$key]).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
+                                $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValue).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
                             }
                         }
 
