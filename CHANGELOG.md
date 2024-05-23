@@ -2,6 +2,18 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.8 - 2024-05-23
+
+### What's Changed
+
+* Fix error when model column is array for old value by @SujalRatnaTamrakar in https://github.com/199ocero/activity-timeline/pull/27
+
+### New Contributors
+
+* @SujalRatnaTamrakar made their first contribution in https://github.com/199ocero/activity-timeline/pull/27
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.7...v1.2.8
+
 ## v1.2.7 - 2024-05-02
 
 ### What's Changed
