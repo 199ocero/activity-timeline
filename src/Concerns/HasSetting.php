@@ -176,7 +176,7 @@ trait HasSetting
                                 $newValue = json_encode($newValue);
                             }
 
-                            if (isset($oldValues[$key]) && $oldValues[$key] != $newValue) {
+                            if (isset($oldValue) && $oldValue != $newValue) {
                                 $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValue).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
                             }
                         }
