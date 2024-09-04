@@ -2,6 +2,18 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.9 - 2024-09-04
+
+### What's Changed
+
+* Display changes from null to a value by @pablo-gonzalez-helpwan in https://github.com/199ocero/activity-timeline/pull/30
+
+### New Contributors
+
+* @pablo-gonzalez-helpwan made their first contribution in https://github.com/199ocero/activity-timeline/pull/30
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.8...v1.2.9
+
 ## v1.2.8 - 2024-05-23
 
 ### What's Changed
