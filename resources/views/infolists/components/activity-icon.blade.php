@@ -1,9 +1,22 @@
+@php
+    use JaOcero\ActivityTimeline\Enums\IconAnimation;
+@endphp
 @if ($icon = $getIcon($getState()))
     @php
         $color = $getColor($getState()) ?? 'gray';
+        $animation = $getAnimation($getState());
     @endphp
 
-    <div class="relative flex items-center justify-center w-8 h-8">
+    <div @class([
+        'relative flex items-center justify-center w-8 h-8',
+        match ($animation) {
+            IconAnimation::Spin, 'spin' => 'animate-spin',
+            IconAnimation::Ping, 'ping' => 'animate-ping',
+            IconAnimation::Pulse, 'pulse' => 'animate-pulse',
+            IconAnimation::Bounce, 'bounce' => 'animate-bounce',
+            default => $animation,
+        },
+    ])>
         <span @class([
             'flex flex-shrink-0 p-[5px] w-8 h-8 justify-center items-center dark:border rounded-full dark:bg-gray-800 dark:border-gray-700',
             match ($color) {
