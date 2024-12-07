@@ -141,6 +141,14 @@ trait HasSetting
         return $activities;
     }
 
+    private static function formatValue($value)
+    {
+        if ($value === null) return '—';
+        if (is_array($value)) return json_encode($value);
+
+        return $value;
+    }
+
     private function modifiedState(): array
     {
         return [
@@ -169,14 +177,10 @@ trait HasSetting
                         $changes = [];
 
                         foreach ($newValues as $key => $newValue) {
-                            $oldValue = is_array($oldValues[$key]) ? json_encode($oldValues[$key]) : $oldValues[$key] ?? '-';
-                            $newValue = $newValue ?? '—';
+                            $oldValue = self::formatValue($oldValues[$key] ?? null);
+                            $newValue = self::formatValue($newValue);
 
-                            if (is_array($newValue)) {
-                                $newValue = json_encode($newValue);
-                            }
-
-                            if (isset($oldValue) && $oldValue != $newValue) {
+                            if ($oldValue != $newValue) {
                                 $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValue).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
                             }
                         }
