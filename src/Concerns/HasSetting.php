@@ -143,8 +143,12 @@ trait HasSetting
 
     private static function formatValue($value)
     {
-        if ($value === null) return '—';
-        if (is_array($value)) return json_encode($value);
+        if ($value === null) {
+            return '—';
+        }
+        if (is_array($value)) {
+            return json_encode($value);
+        }
 
         return $value;
     }
