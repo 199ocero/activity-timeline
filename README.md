@@ -36,6 +36,8 @@ content: [
 This plugin is already accessible within the Infolists builder and now supports both the `->state([])` and `->record()` methods.
 
 ```php
+use JaOcero\ActivityTimeline\Enums\IconAnimation;
+
 public function activityTimelineInfolist(Infolist $infolist): Infolist
 {
     return $infolist
@@ -95,6 +97,11 @@ public function activityTimelineInfolist(Infolist $infolist): Infolist
                             'published' => 'heroicon-m-rocket-launch',
                             default => null,
                         })
+                        /*
+                            You can animate icon with ->animation() method.
+                            Possible values : IconAnimation::Ping, IconAnimation::Pulse, IconAnimation::Bounce, IconAnimation::Spin or a Closure
+                         */
+                        ->animation(IconAnimation::Ping)
                         ->color(fn (string | null $state): string | null => match ($state) {
                             'ideation' => 'purple',
                             'drafting' => 'info',
