@@ -2,6 +2,20 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.10 - 2024-12-07
+
+### What's Changed
+
+* Fix formatting of null values by @randomnetcat in https://github.com/199ocero/activity-timeline/pull/33
+* Add possibility to animate icon by @agencetwogether in https://github.com/199ocero/activity-timeline/pull/32
+
+### New Contributors
+
+* @randomnetcat made their first contribution in https://github.com/199ocero/activity-timeline/pull/33
+* @agencetwogether made their first contribution in https://github.com/199ocero/activity-timeline/pull/32
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.9...v1.2.10
+
 ## v1.2.9 - 2024-09-04
 
 ### What's Changed
