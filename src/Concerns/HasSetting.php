@@ -59,6 +59,7 @@ trait HasSetting
     {
         $activityTitle = $this->modifiedState()['activity_title']['modify_state'];
         $activityDescription = $this->modifiedState()['activity_description']['modify_state'];
+        $activityDate = $this->configuration()['activity_date']['modify_state'];
 
         if (isset($this->configuration()['activity_title']['modify_state'])) {
             $activityTitle = $this->configuration()['activity_title']['modify_state'];
@@ -67,6 +68,10 @@ trait HasSetting
         if (isset($this->configuration()['activity_description']['modify_state'])) {
             $activityDescription = $this->configuration()['activity_description']['modify_state'];
         }
+        if (isset($this->configuration()['activity_date']['modify_state'])) {
+            $activityDate = $this->configuration()['activity_date']['modify_state'];
+        }
+
 
         return $infolist
             ->state([
@@ -87,7 +92,9 @@ trait HasSetting
                             ->modifyState($activityDescription),
                         ActivityDate::make($this->configuration()['activity_date']['name'])
                             ->date($this->configuration()['activity_date']['date'])
-                            ->placeholder($this->configuration()['activity_date']['placeholder']),
+                            ->placeholder($this->configuration()['activity_date']['placeholder'])
+                            ->allowHtml($this->configuration()['activity_description']['allow_html'])
+                            ->modifyState($activityDate),
                         ActivityIcon::make('event')
                             ->icon($this->configuration()['activity_icon']['icon'])
                             ->color($this->configuration()['activity_icon']['color']),
