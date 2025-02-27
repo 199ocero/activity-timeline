@@ -72,7 +72,6 @@ trait HasSetting
             $activityDate = $this->configuration()['activity_date']['modify_state'];
         }
 
-
         return $infolist
             ->state([
                 'activities' => $this->getActivityLogRecord(),
