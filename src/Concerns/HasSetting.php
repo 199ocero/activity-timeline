@@ -59,7 +59,7 @@ trait HasSetting
     {
         $activityTitle = $this->modifiedState()['activity_title']['modify_state'];
         $activityDescription = $this->modifiedState()['activity_description']['modify_state'];
-        $activityDate = $this->configuration()['activity_date']['modify_state'];
+        $activityDate = $this->modifiedState()['activity_date']['modify_state'];
 
         if (isset($this->configuration()['activity_title']['modify_state'])) {
             $activityTitle = $this->configuration()['activity_title']['modify_state'];
@@ -203,6 +203,11 @@ trait HasSetting
                     return null;
                 },
             ],
+             'activity_date' => [
+                'modify_state' => function ($state) {
+                    return new HtmlString($state);
+                }
+            ]
         ];
     }
 }

@@ -307,6 +307,9 @@ class ViewOrderActivities extends ActivityTimelinePage
                 'name' => 'created_at', // or updated_at
                 'date' => 'F j, Y g:i A', // date format
                 'placeholder' => 'No date is set', // this will show when there is no date
+                'modify_state' => function ($state) {
+                    return new HtmlString($state);
+                }
             ],
             'activity_icon' => [
                 'icon' => fn (string | null $state): string | null => match ($state) {
