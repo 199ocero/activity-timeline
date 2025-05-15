@@ -203,11 +203,11 @@ trait HasSetting
                     return null;
                 },
             ],
-             'activity_date' => [
+            'activity_date' => [
                 'modify_state' => function ($state) {
                     return new HtmlString($state);
-                }
-            ]
+                },
+            ],
         ];
     }
 }
