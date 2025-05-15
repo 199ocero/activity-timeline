@@ -2,6 +2,18 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## v1.2.12 - 2025-05-15
+
+### What's Changed
+
+* Added modify_state to activity_date by @albertobenavides in https://github.com/199ocero/activity-timeline/pull/38
+
+### New Contributors
+
+* @albertobenavides made their first contribution in https://github.com/199ocero/activity-timeline/pull/38
+
+**Full Changelog**: https://github.com/199ocero/activity-timeline/compare/v1.2.11...v1.2.12
+
 ## v1.2.11 - 2025-02-27
 
 ### What's Changed
