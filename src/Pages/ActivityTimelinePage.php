@@ -10,7 +10,7 @@ class ActivityTimelinePage extends Page
 {
     use HasSetting, InteractsWithRecord;
 
-    protected static string $view = 'activity-timeline::pages.view-activities';
+    protected string $view = 'activity-timeline::pages.view-activities';
 
     public function mount(int|string $record): void
     {

@@ -3,7 +3,6 @@
 namespace JaOcero\ActivityTimeline\Components;
 
 use Closure;
-use Filament\Infolists\ComponentContainer;
 use Filament\Infolists\Components\Entry;
 use Illuminate\Database\Eloquent\Model;
 use JaOcero\ActivityTimeline\Concerns\HasEmptyState;
@@ -119,7 +118,7 @@ class ActivitySection extends Entry
     }
 
     /**
-     * @return array<ComponentContainer>
+     * @return array<\Filament\Schemas\Schema>
      */
     public function getChildComponentContainers(bool $withHidden = false): array
     {
