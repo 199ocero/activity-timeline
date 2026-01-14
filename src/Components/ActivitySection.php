@@ -138,6 +138,9 @@ class ActivitySection extends Entry
 
             if ($itemData instanceof Model) {
                 $container->record($itemData);
+            } else {
+                // For array data, set state directly
+                $container->state($itemData);
             }
 
             $containers[$itemKey] = $container;
