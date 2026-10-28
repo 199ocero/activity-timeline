@@ -15,17 +15,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event.release.target_commitish }}
+
+      - name: Check whether the CHANGELOG already has this release
+        id: changelog
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          if grep -qF "## ${TAG_NAME}" CHANGELOG.md; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Update Changelog
+        if: steps.changelog.outputs.exists == 'false'
         uses: stefanzweifel/changelog-updater-action@v1
         with:
-          latest-version: ${{ github.event.release.name }}
+          latest-version: ${{ github.event.release.tag_name }}
           release-notes: ${{ github.event.release.body }}
 
       - name: Commit updated CHANGELOG
+        if: steps.changelog.outputs.exists == 'false'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          branch: main
+          branch: ${{ github.event.release.target_commitish }}
           commit_message: Update CHANGELOG
           file_pattern: CHANGELOG.md
