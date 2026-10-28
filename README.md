@@ -1,350 +1,240 @@
 # Activity Timeline
 
 <div class="filament-hidden">
-    
-![Header](https://raw.githubusercontent.com/199ocero/activity-timeline/main/art/images/jaocero-activity-timeline.jpeg)
+
+![Header](https://raw.githubusercontent.com/199ocero/activity-timeline/4.x/art/images/jaocero-activity-timeline.jpeg)
 
 </div>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/jaocero/activity-timeline.svg?style=flat-square)](https://packagist.org/packages/jaocero/activity-timeline)
 [![Total Downloads](https://img.shields.io/packagist/dt/jaocero/activity-timeline.svg?style=flat-square)](https://packagist.org/packages/jaocero/activity-timeline)
 
-Add timelines to custom pages or infolist entries effortlessly. Plus, it teams up smoothly with Spatie Activitylog for easy tracking.
+Beautiful activity timelines for Filament infolists, pages and actions, with first-class support for [Spatie Activitylog](https://github.com/spatie/laravel-activitylog).
+
+## Requirements
+
+- PHP 8.2+
+- Laravel 11.28+
+- Filament v4.x or v5.x
+- A [custom Filament theme](https://filamentphp.com/docs/5.x/styling/overview#creating-a-custom-theme) (Tailwind CSS v4)
+- Optional: `spatie/laravel-activitylog` v4.10+ or v5.x for the activity log integration
 
 ## Installation
-
-You can install the package via composer:
 
 ```bash
 composer require jaocero/activity-timeline
 ```
 
-To adhere to Filament's theming approach, you'll be required to employ a personalized theme in order to utilize this plugin.
+Add the plugin's views to your custom theme's CSS file (usually `resources/css/filament/admin/theme.css`), then rebuild your assets:
 
-> **Custom Theme Installation** > [Filament Docs](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme)
-
-Add the plugin's views to your `tailwind.config.js` file.
-
-```js
-content: [
-    ...'./vendor/jaocero/activity-timeline/resources/views/**/*.blade.php',
-]
+```css
+@source '../../../../vendor/jaocero/activity-timeline/resources/views';
 ```
 
 ## Usage
 
-This plugin is already accessible within the Infolists builder and now supports both the `->state([])` and `->record()` methods.
+Wrap the timeline entries in an `ActivitySection`. It works like a `RepeatableEntry`: give it the key of an array (or relationship) and describe each item with the timeline entries.
 
 ```php
-use JaOcero\ActivityTimeline\Enums\IconAnimation;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use JaOcero\ActivityTimeline\Components\ActivityDate;
+use JaOcero\ActivityTimeline\Components\ActivityDescription;
+use JaOcero\ActivityTimeline\Components\ActivityIcon;
+use JaOcero\ActivityTimeline\Components\ActivitySection;
+use JaOcero\ActivityTimeline\Components\ActivityTitle;
 
-public function activityTimelineInfolist(Infolist $infolist): Infolist
+public function infolist(Schema $schema): Schema
 {
-    return $infolist
+    return $schema
         ->state([
             'activities' => [
-                    [
-                        'title' => "Published Article 🔥 - <span class='italic font-normal dark:text-success-400 text-success-600'>Published with Laravel Filament and Tailwind CSS</span>",
-                        'description' => "<span>Approved and published. Here is the <a href='#' class='font-bold hover:underline dark:text-orange-300'>link.</a></span>",
-                        'status' => 'published',
-                        'created_at' => now()->addDays(8),
-                    ],
-                    [
-                        'title' => 'Reviewing Article - Final Touches',
-                        'description' => "<span class='italic'>Reviewing the article and making it ready for publication.</span>",
-                        'status' => '',
-                        'created_at' => now()->addDays(5),
-                    ],
-                    [
-                        'title' => "Drafting Article - <span class='text-sm italic font-normal text-purple-800 dark:text-purple-300'>Make it ready for review</span>",
-                        'description' => 'Drafting the article and making it ready for review.',
-                        'status' => 'drafting',
-                        'created_at' => now()->addDays(2),
-                    ],
-                    [
-                        'title' => 'Ideation - Looking for Ideas 🤯',
-                        'description' => 'Idea for my article.',
-                        'status' => 'ideation',
-                        'created_at' => now()->subDays(7),
-                    ]
-                ]
+                ['title' => 'Published article', 'description' => 'Live on the blog.', 'status' => 'published', 'created_at' => now()],
+                ['title' => 'Drafting article', 'description' => 'Writing the first draft.', 'status' => 'drafting', 'created_at' => now()->subDays(2)],
+            ],
         ])
-        ->schema([
-
-         /*
-    	    You should enclose the entire components within a personalized "ActivitySection" entry.
-            This section functions identically to the repeater entry; you simply have to provide the array state's key.
-    	 */
-
+        ->components([
             ActivitySection::make('activities')
-                ->label('My Activities')
+                ->label('My activities')
                 ->description('These are the activities that have been recorded.')
                 ->schema([
-                    ActivityTitle::make('title')
-                        ->placeholder('No title is set')
-                        ->allowHtml(), // Be aware that you will need to ensure that the HTML is safe to render, otherwise your application will be vulnerable to XSS attacks.
-                    ActivityDescription::make('description')
-                        ->placeholder('No description is set')
-                        ->allowHtml(),
-                    ActivityDate::make('created_at')
-                        ->date('F j, Y', 'Asia/Manila')
-                        ->placeholder('No date is set.'),
+                    ActivityTitle::make('title'),
+                    ActivityDescription::make('description'),
+                    ActivityDate::make('created_at')->date('F j, Y'),
                     ActivityIcon::make('status')
-                        ->icon(fn (string | null $state): string | null => match ($state) {
-                            'ideation' => 'heroicon-m-light-bulb',
-                            'drafting' => 'heroicon-m-bolt',
-                            'reviewing' => 'heroicon-m-document-magnifying-glass',
-                            'published' => 'heroicon-m-rocket-launch',
+                        ->icon(fn (?string $state): ?Heroicon => match ($state) {
+                            'drafting' => Heroicon::OutlinedPencil,
+                            'published' => Heroicon::OutlinedRocketLaunch,
                             default => null,
                         })
-                        /*
-                            You can animate icon with ->animation() method.
-                            Possible values : IconAnimation::Ping, IconAnimation::Pulse, IconAnimation::Bounce, IconAnimation::Spin or a Closure
-                         */
-                        ->animation(IconAnimation::Ping)
-                        ->color(fn (string | null $state): string | null => match ($state) {
-                            'ideation' => 'purple',
-                            'drafting' => 'info',
-                            'reviewing' => 'warning',
-                            'published' => 'success',
-                            default => 'gray',
-                        }),
-                ])
-                ->showItemsCount(2) // Show up to 2 items
-                ->showItemsLabel('View Old') // Show "View Old" as link label
-                ->showItemsIcon('heroicon-m-chevron-down') // Show button icon
-                ->showItemsColor('gray') // Show button color and it supports all colors
-                ->aside(true)
-                ->headingVisible(true) // make heading visible or not
-                ->extraAttributes(['class'=>'my-new-class']) // add extra class
+                        ->color(fn (?string $state): string => $state === 'published' ? 'success' : 'gray'),
+                ]),
         ]);
 }
 ```
 
-When utilizing the `->record()` function, you provide your model in a manner similar to the code showcased below:
+`ActivityTitle`, `ActivityDescription`, `ActivityDate` and `ActivityBadge` extend Filament's `TextEntry`, so `formatStateUsing()`, `placeholder()`, `html()`, `markdown()`, `limit()`, `date()`, `since()`, `dateTooltip()` and friends all work. `ActivityIcon` extends `IconEntry`. Any other entry you add to the schema (for example a `TextEntry`) is rendered below the item.
+
+Items without an icon get a colored dot. HTML is escaped unless you call `html()`, and `html()` output is sanitized.
+
+### Entries
+
+| Entry | Shows |
+| --- | --- |
+| `ActivityIcon` | The node on the rail. `icon()`, `color()` and `animation(IconAnimation::Ping \| Spin \| Pulse \| Bounce)` |
+| `ActivityTitle` | The title |
+| `ActivityDescription` | Text below the title |
+| `ActivityDate` | The date, right aligned. `relative()` shows "2 hours ago" with the full date in a tooltip |
+| `ActivityBadge` | A pill next to the title. Defaults to colors for `created`, `updated`, `deleted` and `restored` |
+| `ActivityCauser` | An avatar (or initials) next to the title. Accepts a model, a name, or `['name' => ..., 'avatar' => ...]`. `showName()` |
+| `ActivityChanges` | A before → after list from `['old' => [...], 'attributes' => [...]]`. `attributeLabels()`, `formatValueUsing()`, `only()`, `except()` |
+
+### Section options
 
 ```php
-protected $activities;
+ActivitySection::make('activities')
+    ->aside()                 // Heading on the side, like an aside section
+    ->contained(false)        // No card
+    ->compact()               // Smaller nodes and tighter spacing
+    ->headingVisible(false)
+    ->groupByDate()           // "Today", "Yesterday" and date separators
+    ->reverse()               // Oldest first
+    ->showItemsCount(5)       // Reveal 5 items at a time, in the browser
+    ->showItemsLabel('View older')
+    ->showItemsIcon(Heroicon::ChevronDown)
+    ->showItemsColor('primary')
+    ->scrollOnShowMore(false) // Revealed items scroll into view by default
+    ->loadMore('loadMoreActivities', hasMoreItems: fn (): bool => $this->hasMore) // Calls a Livewire method
+    ->emptyStateHeading('No activities yet')
+    ->emptyStateDescription('Check back later.')
+    ->emptyStateIcon(Heroicon::OutlinedBoltSlash);
+```
 
-public function __construct()
-{
-    $this->activities = User::query()->with('activities')->where('id', auth()->user()->id)->first();
-}
+## Spatie Activitylog
 
-public function activityTimelineInfolist(Infolist $infolist): Infolist
+Install and set up [spatie/laravel-activitylog](https://spatie.be/docs/laravel-activitylog), then add `LogsActivity` to your models. Both v4 and v5 are supported.
+
+### In any infolist
+
+`ActivityLogSection` loads the activities of the infolist's record, with icons, causer avatars, event badges, relative dates and a changes list already configured:
+
+```php
+use JaOcero\ActivityTimeline\Components\ActivityLogSection;
+
+public static function infolist(Schema $schema): Schema
 {
-    return $infolist
-        ->record($this->activities)
-        // ... remaining code
+    return $schema->components([
+        // ...
+        ActivityLogSection::make()
+            ->limit(25)
+            ->groupByDate(),
+    ]);
 }
 ```
 
-Sometimes, when we don't have any info to show to users, it's important to improve their experience by displaying something. So, I include an empty state, like the one in the [Filament Table Empty State](https://filamentphp.com/docs/3.x/tables/empty-state).
+It can be customized:
 
 ```php
-public function activityTimelineInfolist(Infolist $infolist): Infolist
+ActivityLogSection::make()
+    ->subject(fn (Order $record): Model => $record->customer)
+    ->modifyQueryUsing(fn (Builder $query): Builder => $query->inLog('orders'))
+    ->eventIcons(['shipped' => Heroicon::OutlinedTruck])
+    ->eventColors(['shipped' => 'primary'])
+    ->attributeLabels(['customer_id' => 'Customer'])
+    ->formatChangeValueUsing(fn (mixed $value, string $attribute): mixed => $attribute === 'total' ? Number::currency($value / 100) : $value)
+    ->getTitleUsing(fn (array $activity): string => $activity['description'])
+    ->getDescriptionUsing(fn (array $activity): ?string => $activity['properties']['note'] ?? null);
+```
+
+### In a slide-over
+
+```php
+use JaOcero\ActivityTimeline\Actions\ActivityTimelineAction;
+
+->recordActions([
+    ActivityTimelineAction::make()
+        ->timeline(fn (ActivityLogSection $timeline): ActivityLogSection => $timeline->limit(100)),
+])
+```
+
+### On a resource page
+
+Create a page that extends `ActivityTimelinePage`, and register it with a route containing `{record}`:
+
+```php
+use JaOcero\ActivityTimeline\Components\ActivityLogSection;
+use JaOcero\ActivityTimeline\Pages\ActivityTimelinePage;
+
+class ViewOrderActivities extends ActivityTimelinePage
 {
-    return $infolist
-        ->state([
-            'activities' => []
-        )]
-        ->schema([
-            ActivitySection::make('activities')
-                // ... other code
-                ->emptyStateHeading('No activities yet.')
-                ->emptyStateDescription('Check back later for activities that have been recorded.')
-                ->emptyStateIcon('heroicon-o-bolt-slash')
-        ])
+    protected static string $resource = OrderResource::class;
+
+    protected function getActivitiesPerPage(): int
+    {
+        return 20; // Older activities load with a "Load older activities" button
+    }
+
+    protected function configureActivitySection(ActivityLogSection $section): ActivityLogSection
+    {
+        return $section->eventIcons(['shipped' => Heroicon::OutlinedTruck]);
+    }
+
+    protected function modifyActivitiesQuery(Builder $query): Builder
+    {
+        return $query->inLog('orders');
+    }
 }
 ```
-
-## Usage with Spatie Activity Log Package
-
-This plugin works with [spatie/laravel-activitylog](https://github.com/spatie/laravel-activitylog), making it easy to log user actions in your app. It can also automatically log model events, storing everything in the `activity_log` table. To use the plugin, just install `spatie/laravel-activitylog`, set it up, and you're good to go.
-
-### Creating a Custom Page
-
-You are required to create a custom page within your `resources` to display all activities based on the record passed to the route.
-
-```php
-php artisan make:filament-page ViewOrderActivities --resource=OrderResource --type=custom
-```
-
-### Including the Page in your Resource Class
-
-Simply include the custom page in the `getPages()` method so that we can access it.
 
 ```php
 public static function getPages(): array
 {
     return [
-        // ... other pages
-        // The format of route doesn't matter, as long as it includes the route parameter {record}.
-        'activities' => Pages\ViewOrderActivities::route('/order/{record}/activities'),
+        // ...
+        'activities' => Pages\ViewOrderActivities::route('/{record}/activities'),
     ];
 }
 ```
 
-In the `actions` method of your table, include an additional custom action. This action should redirect users to the custom page we've generated earlier.
-
 ```php
-public static function table(Table $table): Table
-{
-    return $table
-        ->columns([
-            // ...
-        ])
-        ->filters([
-            // ...
-        ])
-        ->actions([
-            Tables\Actions\Action::make('view_activities')
-                ->label('Activities')
-                ->icon('heroicon-m-bolt')
-                ->color('purple')
-                ->url(fn ($record) => OrderResource::getUrl('activities', ['record' => $record])),
-        ])
-        ->bulkActions([
-            // ...
-        ]);
-}
+Action::make('activities')
+    ->url(fn (Order $record): string => OrderResource::getUrl('activities', ['record' => $record])),
 ```
 
-### Setting up your Custom Page
+## Styling
 
-Changes are needed in your custom page. Instead of extending using the regular `Page` class will make use of a specific class called `ActivityTimelinePage` provided by the plugin. Additionally, you should include your resource class.
+The timeline uses Filament's own section, badge, link and avatar styles, so it follows your panel's colors and dark mode. Every element has a CSS hook class for customization:
 
-```php
-use App\Filament\Resources\OrderResource;
-use JaOcero\ActivityTimeline\Pages\ActivityTimelinePage;
-
-class ViewOrderActivities extends ActivityTimelinePage
-{
-    protected static string $resource = OrderResource::class;
-}
-```
-
-### Configuration
-
-Behind the scenes, the plugin utilizes the previously mentioned infolists entry. We only modify the properties/data, but the logic remains unchanged.
-
-```php
-use App\Filament\Resources\OrderResource;
-use JaOcero\ActivityTimeline\Pages\ActivityTimelinePage;
-
-class ViewOrderActivities extends ActivityTimelinePage
-{
-    protected static string $resource = OrderResource::class;
-
-    protected function configuration(): array
-    {
-        return [
-            'activity_section' => [
-                'label' => 'Activities', // label for the section
-                'description' => 'These are the activities that have been recorded.', // description for the section
-                'show_items_count' => 0, // show the number of items to be shown
-                'show_items_label' => 'Show more', // show button label
-                'show_items_icon' => 'heroicon-o-chevron-down', // show button icon,
-                'show_items_color' => 'gray', // show button color,
-                'aside' => true, // show the section in the aside
-                'empty_state_heading' => 'No activities yet', // heading for the empty state
-                'empty_state_description' => 'Check back later for activities that have been recorded.', // description for the empty state
-                'empty_state_icon' => 'heroicon-o-bolt-slash', // icon for the empty state
-                'heading_visible' => true, // show the heading
-                'extra_attributes' => [], // extra attributes
-            ],
-            'activity_title' => [
-                'placeholder' => 'No title is set', // this will show when there is no title
-                'allow_html' => true, // set true to allow html in the title
-
-                /**
-                 * You are free to adjust the state before displaying it on your page.
-                 * Take note that the state returns these data below:
-                 *      [
-                 *       'log_name' => $activity->log_name,
-                  *      'description' => $activity->description,
-                  *      'subject' => $activity->subject,
-                  *      'event' => $activity->event,
-                  *      'causer' => $activity->causer,
-                  *      'properties' => json_decode($activity->properties, true),
-                  *      'batch_uuid' => $activity->batch_uuid,
-                  *     ]
-
-                  * If you wish to make modifications, please refer to the default code in the HasSetting trait.
-                 */
-
-                // 'modify_state' => function (array $state) {
-                //
-                // }
-
-            ],
-            'activity_description' => [
-                'placeholder' => 'No description is set', // this will show when there is no description
-                'allow_html' => true, // set true to allow html in the description
-
-                /**
-                 * You are free to adjust the state before displaying it on your page.
-                 * Take note that the state returns these data below:
-                 *      [
-                 *       'log_name' => $activity->log_name,
-                  *      'description' => $activity->description,
-                  *      'subject' => $activity->subject,
-                  *      'event' => $activity->event,
-                  *      'causer' => $activity->causer,
-                  *      'properties' => json_decode($activity->properties, true),
-                  *      'batch_uuid' => $activity->batch_uuid,
-                  *     ]
-
-                  * If you wish to make modifications, please refer to the default code in the HasSetting trait.
-                 */
-
-                // 'modify_state' => function (array $state) {
-                //
-                // }
-
-            ],
-            'activity_date' => [
-                'name' => 'created_at', // or updated_at
-                'date' => 'F j, Y g:i A', // date format
-                'placeholder' => 'No date is set', // this will show when there is no date
-                'modify_state' => function ($state) {
-                    return new HtmlString($state);
-                }
-            ],
-            'activity_icon' => [
-                'icon' => fn (string | null $state): string | null => match ($state) {
-                    /**
-                     * 'event_name' => 'heroicon-o-calendar',
-                     * ... and more
-                     */
-                    default => null
-                },
-                'color' => fn (string | null $state): string | null => match ($state) {
-                    /**
-                     * 'event_name' => 'primary',
-                     * ... and more
-                     */
-                    default => null
-                },
-            ]
-        ];
-    }
-}
-```
-
-## Style customization
-
-Similar to Filament, this plugin also includes CSS `hook` classes that enable the customization of different HTML elements through CSS.
+`fi-timeline`, `fi-timeline-compact`, `fi-timeline-section`, `fi-timeline-list`, `fi-timeline-group-label`, `fi-timeline-item`, `fi-timeline-item-rail`, `fi-timeline-item-node`, `fi-timeline-item-icon`, `fi-timeline-item-dot`, `fi-timeline-item-content`, `fi-timeline-item-header`, `fi-timeline-item-causer`, `fi-timeline-item-title`, `fi-timeline-item-badge`, `fi-timeline-item-date`, `fi-timeline-item-description`, `fi-timeline-item-changes`, `fi-timeline-item-change`, `fi-timeline-item-change-old`, `fi-timeline-item-change-new`, `fi-timeline-item-extras`, `fi-timeline-show-more`, `fi-timeline-load-more`, `fi-timeline-empty-state`.
 
 ```css
-.fi-timeline-section {
-    @apply bg-transparent !important;
+.fi-timeline-item-title {
+    @apply font-semibold;
 }
 ```
 
-This plugin comes with numerous CSS `hook` classes. For a straightforward approach, consider using your browser's developer tools to carefully examine the element and identify these classes.
+All strings can be translated by publishing the translations:
 
-That's all! If you encounter any issues or have features you'd like to discuss, feel free to chat with me in our Discord channel.
+```bash
+php artisan vendor:publish --tag=activity-timeline-translations
+```
+
+## Upgrading
+
+### From v1.x (Filament v3)
+
+- Requires Filament v4 or v5. Infolists are now schemas: change `activityInfolist(Infolist $infolist): Infolist` to `activityInfolist(Schema $schema): Schema`.
+- Replace the `tailwind.config.js` content path with the `@source` line above.
+- `modifyState()` and `allowHtml()` still work, but are deprecated in favor of Filament's `formatStateUsing()` and `html()`. HTML is now sanitized.
+- `ActivityTimelinePage::configuration()` still works and only needs the keys you change. It is deprecated in favor of `configureActivitySection()` and `modifyActivitiesQuery()`.
+- The page now shows the activities 20 at a time with a "Load older activities" button, uses relative dates, groups by day and is no longer `aside` by default. Set `'aside' => true` or `'date' => 'F j, Y g:i A'` in `configuration()` to restore the old look.
+- Spatie Activitylog v5 is supported: changes are read from `attribute_changes`, and from `properties` on v4.
+
+## Testing
+
+```bash
+composer test
+```
 
 ## Changelog
 
@@ -360,8 +250,8 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
--   [Jay-Are Ocero](https://github.com/199ocero)
--   [All Contributors](../../contributors)
+- [Jay-Are Ocero](https://github.com/199ocero)
+- [All Contributors](../../contributors)
 
 ## License
 
