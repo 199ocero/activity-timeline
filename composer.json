@@ -1,13 +1,15 @@
 {
     "name": "jaocero/activity-timeline",
-    "description": "Add timelines to custom pages or infolist entries effortlessly. Plus, it teams up smoothly with Spatie Activitylog for easy tracking.",
+    "description": "Beautiful activity timelines for Filament infolists, pages and actions, with first-class support for Spatie Activitylog.",
     "keywords": [
         "jaocero",
         "laravel",
         "activity-timeline",
         "timeline",
+        "activitylog",
+        "filamentphp",
         "filament-infolists",
-        "filamentphp"
+        "filament-plugin"
     ],
     "homepage": "https://github.com/jaocero/activity-timeline",
     "support": {
@@ -23,22 +25,28 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "filament/filament": "^3.0",
-        "spatie/laravel-package-tools": "^1.15.0",
-        "illuminate/contracts": "^10.0|^11.0|^12.0"
+        "php": "^8.2",
+        "filament/filament": "^4.0|^5.0",
+        "filament/infolists": "^4.0|^5.0",
+        "illuminate/contracts": "^11.28|^12.0|^13.0",
+        "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
-        "nunomaduro/collision": "^7.9",
-        "orchestra/testbench": "^8.0|^9.0",
-        "pestphp/pest": "^2.0",
-        "pestphp/pest-plugin-arch": "^2.0",
-        "pestphp/pest-plugin-laravel": "^2.0"
+        "laravel/pint": "^1.24",
+        "nunomaduro/collision": "^8.1",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "pestphp/pest": "^3.0|^4.0",
+        "pestphp/pest-plugin-arch": "^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+        "pestphp/pest-plugin-livewire": "^3.0|^4.0",
+        "spatie/laravel-activitylog": "^4.10|^5.0"
+    },
+    "suggest": {
+        "spatie/laravel-activitylog": "Required to use ActivityLogSection, ActivityTimelinePage and ActivityTimelineAction (^4.10 or ^5.0)."
     },
     "autoload": {
         "psr-4": {
-            "JaOcero\\ActivityTimeline\\": "src/",
-            "JaOcero\\ActivityTimeline\\Database\\Factories\\": "database/factories/"
+            "JaOcero\\ActivityTimeline\\": "src/"
         }
     },
     "autoload-dev": {
@@ -54,8 +62,7 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "phpstan/extension-installer": true
+            "pestphp/pest-plugin": true
         }
     },
     "extra": {

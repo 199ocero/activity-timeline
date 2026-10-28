@@ -11,3 +11,5 @@ phpunit.xml
 phpstan.neon
 testbench.yaml
 vendor
+.phpunit.cache
+package-lock.json

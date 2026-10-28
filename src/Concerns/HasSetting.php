@@ -2,212 +2,208 @@
 
 namespace JaOcero\ActivityTimeline\Concerns;
 
-use Filament\Infolists\Infolist;
-use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
+use BackedEnum;
+use Closure;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use JaOcero\ActivityTimeline\Components\ActivityBadge;
+use JaOcero\ActivityTimeline\Components\ActivityCauser;
 use JaOcero\ActivityTimeline\Components\ActivityDate;
 use JaOcero\ActivityTimeline\Components\ActivityDescription;
 use JaOcero\ActivityTimeline\Components\ActivityIcon;
-use JaOcero\ActivityTimeline\Components\ActivitySection;
+use JaOcero\ActivityTimeline\Components\ActivityLogSection;
 use JaOcero\ActivityTimeline\Components\ActivityTitle;
 
+/**
+ * Builds a Spatie Activitylog timeline for the page's record.
+ *
+ * Customize it by overriding `configureActivitySection()` and `modifyActivitiesQuery()`.
+ * The 1.x `configuration()` array is still honored.
+ */
 trait HasSetting
 {
+    public int $activitiesPage = 1;
+
+    /**
+     * @deprecated Override `configureActivitySection()` instead. Any keys returned here are merged over the defaults.
+     *
+     * @return array<string, array<string, mixed>>
+     */
     protected function configuration(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    protected function getDefaultActivityTimelineConfiguration(): array
     {
         return [
             'activity_section' => [
-                'label' => 'Activities',
-                'description' => 'These are the activities that have been recorded.',
+                'label' => __('activity-timeline::timeline.section.label'),
+                'description' => __('activity-timeline::timeline.section.description'),
                 'show_items_count' => 0,
-                'show_items_label' => 'Show more',
-                'show_items_icon' => 'heroicon-o-chevron-right',
+                'show_items_label' => null,
+                'show_items_icon' => null,
                 'show_items_color' => 'gray',
-                'aside' => true,
-                'empty_state_heading' => 'No activities yet',
-                'empty_state_description' => 'Check back later for activities that have been recorded.',
-                'empty_state_icon' => 'heroicon-o-bolt-slash',
+                'aside' => false,
+                'empty_state_heading' => null,
+                'empty_state_description' => null,
+                'empty_state_icon' => null,
                 'heading_visible' => true,
                 'extra_attributes' => [],
             ],
             'activity_title' => [
-                'placeholder' => 'No title is set',
+                'placeholder' => null,
                 'allow_html' => true,
             ],
             'activity_description' => [
-                'placeholder' => 'No description is set',
+                'placeholder' => null,
                 'allow_html' => true,
             ],
             'activity_date' => [
                 'name' => 'created_at',
-                'date' => 'F j, Y g:i A',
-                'placeholder' => 'No date is set',
+                'date' => null,
+                'placeholder' => null,
             ],
             'activity_icon' => [
-                'icon' => fn (?string $state): ?string => match ($state) {
-                    default => null
-                },
-                'color' => fn (?string $state): ?string => match ($state) {
-                    default => null
-                },
+                'icon' => null,
+                'color' => null,
             ],
         ];
     }
 
-    public function activityInfolist(Infolist $infolist): Infolist
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    protected function getActivityTimelineConfiguration(): array
     {
-        $activityTitle = $this->modifiedState()['activity_title']['modify_state'];
-        $activityDescription = $this->modifiedState()['activity_description']['modify_state'];
-        $activityDate = $this->modifiedState()['activity_date']['modify_state'];
-
-        if (isset($this->configuration()['activity_title']['modify_state'])) {
-            $activityTitle = $this->configuration()['activity_title']['modify_state'];
-        }
-
-        if (isset($this->configuration()['activity_description']['modify_state'])) {
-            $activityDescription = $this->configuration()['activity_description']['modify_state'];
-        }
-        if (isset($this->configuration()['activity_date']['modify_state'])) {
-            $activityDate = $this->configuration()['activity_date']['modify_state'];
-        }
-
-        return $infolist
-            ->state([
-                'activities' => $this->getActivityLogRecord(),
-            ])
-            ->schema([
-                ActivitySection::make('activities')
-                    ->label($this->configuration()['activity_section']['label'])
-                    ->description($this->configuration()['activity_section']['description'])
-                    ->schema([
-                        ActivityTitle::make('activityData')
-                            ->placeholder($this->configuration()['activity_title']['placeholder'])
-                            ->allowHtml($this->configuration()['activity_title']['allow_html'])
-                            ->modifyState($activityTitle),
-                        ActivityDescription::make('activityData')
-                            ->placeholder($this->configuration()['activity_description']['placeholder'])
-                            ->allowHtml($this->configuration()['activity_description']['allow_html'])
-                            ->modifyState($activityDescription),
-                        ActivityDate::make($this->configuration()['activity_date']['name'])
-                            ->date($this->configuration()['activity_date']['date'])
-                            ->placeholder($this->configuration()['activity_date']['placeholder'])
-                            ->allowHtml($this->configuration()['activity_description']['allow_html'])
-                            ->modifyState($activityDate),
-                        ActivityIcon::make('event')
-                            ->icon($this->configuration()['activity_icon']['icon'])
-                            ->color($this->configuration()['activity_icon']['color']),
-                    ])
-                    ->showItemsCount($this->configuration()['activity_section']['show_items_count'])
-                    ->showItemsLabel($this->configuration()['activity_section']['show_items_label'])
-                    ->showItemsIcon($this->configuration()['activity_section']['show_items_icon'])
-                    ->showItemsColor($this->configuration()['activity_section']['show_items_color'])
-                    ->aside($this->configuration()['activity_section']['aside'])
-                    ->emptyStateHeading($this->configuration()['activity_section']['empty_state_heading'])
-                    ->emptyStateDescription($this->configuration()['activity_section']['empty_state_description'])
-                    ->emptyStateIcon($this->configuration()['activity_section']['empty_state_icon'])
-                    ->headingVisible($this->configuration()['activity_section']['heading_visible'])
-                    ->extraAttributes($this->configuration()['activity_section']['extra_attributes']),
-            ])
-            ->columns(1);
+        return array_replace_recursive($this->getDefaultActivityTimelineConfiguration(), $this->configuration());
     }
 
-    protected function getActivites(): \Illuminate\Database\Eloquent\Collection
+    public function activityInfolist(Schema $schema): Schema
     {
-        $activityModelClass = config('activitylog.activity_model');
-        $activityModel = new $activityModelClass;
-
-        return $activityModel::query()
-            ->with(['causer', 'subject'])
-            ->where('subject_id', $this->record->id)
-            ->where('subject_type', get_class($this->record))
-            ->orderBy('created_at', 'desc')
-            ->get();
+        return $schema
+            ->record($this->getRecord())
+            ->components([
+                $this->configureActivitySection($this->makeActivitySection()),
+            ]);
     }
 
-    private function getActivityLogRecord(): Collection
+    /**
+     * Override to customize the timeline, e.g. `$section->eventIcons([...])->compact()`.
+     */
+    protected function configureActivitySection(ActivityLogSection $section): ActivityLogSection
     {
-        $activities = $this->getActivites();
-
-        $activities->transform(function ($activity) {
-
-            $activity->activityData = [
-                'log_name' => $activity->log_name,
-                'description' => $activity->description,
-                'subject' => $activity->subject,
-                'event' => $activity->event,
-                'causer' => $activity->causer,
-                'properties' => json_decode($activity->properties, true),
-                'batch_uuid' => $activity->batch_uuid,
-            ];
-
-            return $activity;
-        });
-
-        return $activities;
+        return $section;
     }
 
-    private static function formatValue($value)
+    /**
+     * Override to scope the activities, e.g. `$query->inLog('orders')`.
+     *
+     * @param  Builder<Model>  $query
+     * @return Builder<Model>
+     */
+    protected function modifyActivitiesQuery(Builder $query): Builder
     {
-        if ($value === null) {
-            return '—';
+        return $query;
+    }
+
+    protected function getActivitiesPerPage(): int
+    {
+        return 20;
+    }
+
+    public function loadMoreActivities(): void
+    {
+        $this->activitiesPage++;
+    }
+
+    protected function makeActivitySection(): ActivityLogSection
+    {
+        $configuration = $this->getActivityTimelineConfiguration();
+        $section = $configuration['activity_section'];
+
+        $timeline = ActivityLogSection::make('activities')
+            ->subject(fn (): Model => $this->getRecord())
+            ->modifyQueryUsing(fn (Builder $query): Builder => $this->modifyActivitiesQuery($query))
+            ->limit(fn (): int => $this->getActivitiesPerPage() * $this->activitiesPage)
+            ->loadMore('loadMoreActivities', fn (ActivityLogSection $component): bool => $component->hasMoreActivities())
+            ->groupByDate()
+            ->label($section['label'])
+            ->description($section['description'])
+            ->showItemsCount($section['show_items_count'])
+            ->showItemsLabel($section['show_items_label'])
+            ->showItemsIcon($section['show_items_icon'])
+            ->showItemsColor($section['show_items_color'])
+            ->aside($section['aside'])
+            ->emptyStateHeading($section['empty_state_heading'])
+            ->emptyStateDescription($section['empty_state_description'])
+            ->emptyStateIcon($section['empty_state_icon'])
+            ->headingVisible($section['heading_visible'])
+            ->extraAttributes($section['extra_attributes']);
+
+        return $timeline->schema(fn (ActivityLogSection $component): array => $this->getLegacyTimelineComponents($component, $configuration));
+    }
+
+    /**
+     * The default components, with the 1.x configuration applied on top.
+     *
+     * @param  array<string, array<string, mixed>>  $configuration
+     * @return array<Component>
+     */
+    protected function getLegacyTimelineComponents(ActivityLogSection $timeline, array $configuration): array
+    {
+        $userConfiguration = $this->configuration();
+
+        $title = $configuration['activity_title'];
+        $description = $configuration['activity_description'];
+        $date = $configuration['activity_date'];
+        $icon = $configuration['activity_icon'];
+
+        $titleEntry = isset($userConfiguration['activity_title']['modify_state'])
+            ? ActivityTitle::make('activityData')->modifyState($userConfiguration['activity_title']['modify_state'])
+            : ActivityTitle::make('title');
+
+        $descriptionEntry = isset($userConfiguration['activity_description']['modify_state'])
+            ? ActivityDescription::make('activityData')->modifyState($userConfiguration['activity_description']['modify_state'])
+            : ActivityDescription::make('description_html');
+
+        $dateEntry = ActivityDate::make($date['name'])
+            ->placeholder($date['placeholder']);
+
+        if (filled($date['date'])) {
+            $dateEntry->dateTime($date['date'])->sinceTooltip();
+        } else {
+            $dateEntry->relative();
         }
-        if (is_array($value)) {
-            return json_encode($value);
+
+        if (isset($userConfiguration['activity_date']['modify_state'])) {
+            $dateEntry->modifyState($userConfiguration['activity_date']['modify_state']);
         }
 
-        return $value;
-    }
-
-    private function modifiedState(): array
-    {
         return [
-            'activity_title' => [
-                'modify_state' => function (array $state) {
-                    if ($state['description'] == $state['event']) {
-                        $className = Str::lower(Str::snake(class_basename($state['subject']), ' '));
-                        $causerName = $state['causer']->name ?? $state['causer']->first_name ?? $state['causer']->last_name ?? $state['causer']->username ?? 'Unknown';
-
-                        return new HtmlString(sprintf('The <strong>%s</strong> was <strong>%s</strong> by <strong>%s</strong>.', $className, $state['event'], $causerName));
-                    }
-
-                    return new HtmlString($state['description']);
-                },
-            ],
-            'activity_description' => [
-                'modify_state' => function (array $state) {
-
-                    $properties = $state['properties'];
-
-                    if (! empty($properties) && isset($properties['old']) && isset($properties['attributes'])) {
-
-                        $oldValues = $properties['old'];
-                        $newValues = $properties['attributes'];
-
-                        $changes = [];
-
-                        foreach ($newValues as $key => $newValue) {
-                            $oldValue = self::formatValue($oldValues[$key] ?? null);
-                            $newValue = self::formatValue($newValue);
-
-                            if ($oldValue != $newValue) {
-                                $changes[] = "- {$key} from <strong>".htmlspecialchars($oldValue).'</strong> to <strong>'.htmlspecialchars($newValue).'</strong>';
-                            }
-                        }
-
-                        $causerName = $state['causer']->name ?? $state['causer']->first_name ?? $state['causer']->last_name ?? $state['causer']->username ?? 'Unknown';
-
-                        return new HtmlString(sprintf('%s %s the following: <br>%s', $causerName, $state['event'], implode('<br>', $changes)));
-                    }
-
-                    return null;
-                },
-            ],
-            'activity_date' => [
-                'modify_state' => function ($state) {
-                    return new HtmlString($state);
-                },
-            ],
+            ActivityIcon::make('event')
+                ->icon(fn (?string $state): string|BackedEnum|null => static::evaluateLegacyCallback($icon['icon'], $state) ?? $timeline->getEventIcon($state))
+                ->color(fn (?string $state): string|array => static::evaluateLegacyCallback($icon['color'], $state) ?? $timeline->getEventColor($state)),
+            ActivityCauser::make('causer'),
+            $titleEntry
+                ->placeholder($title['placeholder'])
+                ->allowHtml($title['allow_html']),
+            ActivityBadge::make('event'),
+            $dateEntry,
+            $descriptionEntry
+                ->placeholder($description['placeholder'])
+                ->allowHtml($description['allow_html']),
+            $timeline->makeChangesEntry(),
         ];
+    }
+
+    protected static function evaluateLegacyCallback(mixed $callback, ?string $state): mixed
+    {
+        return $callback instanceof Closure ? $callback($state) : $callback;
     }
 }

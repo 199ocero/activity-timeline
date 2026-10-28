@@ -2,6 +2,43 @@
 
 All notable changes to `activity-timeline` will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* Filament v4 and v5 support (Laravel 11.28+, PHP 8.2+, Tailwind CSS v4)
+* Redesigned timeline: colored icon nodes on a continuous rail, Filament sections and badges, dark mode and `fi-timeline-*` CSS hook classes
+* `ActivityBadge`, `ActivityCauser` (avatar or initials) and `ActivityChanges` (before → after list) entries
+* `groupByDate()`, `compact()`, `reverse()`, `contained()` and `loadMore()` on `ActivitySection`
+* `ActivityDate::relative()` with the full date in a tooltip
+* `ActivityLogSection`, a ready-made Spatie Activitylog timeline for any infolist
+* `ActivityTimelineAction`, a slide-over showing a record's activities
+* `configureActivitySection()`, `modifyActivitiesQuery()` and `getActivitiesPerPage()` on `ActivityTimelinePage`
+* Spatie Activitylog v5 support (`attribute_changes`), alongside v4
+* Translations
+
+### Fixed
+
+* `ActivityDate::date()` now formats the date
+* Reading Spatie Activitylog v4+ properties no longer fails (they are already cast to a collection)
+* Activity subjects are matched with `whereMorphedTo()`, so morph maps work
+* Causer names, subjects and descriptions are escaped in the default titles
+
+### Changed
+
+* The timeline renders in a single view per section instead of one view per entry, and no longer uses random keys
+* The activity page loads activities 20 at a time instead of all at once
+* HTML from `html()` / `allowHtml()` is sanitized
+
+### Deprecated
+
+* `modifyState()` and `allowHtml()`. Use `formatStateUsing()` and `html()`
+* `ActivityTimelinePage::configuration()`. Use `configureActivitySection()` and `modifyActivitiesQuery()`
+
+### Removed
+
+* Filament v3 support and the Tailwind CSS v3 build
+
 ## v1.2.12 - 2025-05-15
 
 ### What's Changed
