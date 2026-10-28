@@ -2,20 +2,12 @@
 
 namespace JaOcero\ActivityTimeline\Components;
 
-use Filament\Forms\Components\Concerns\CanAllowHtml;
-use Filament\Infolists\Components\Entry;
+use Filament\Infolists\Components\TextEntry;
 use JaOcero\ActivityTimeline\Concerns\CanModifyState;
+use JaOcero\ActivityTimeline\Concerns\RendersTimelineText;
 
-class ActivityTitle extends Entry
+class ActivityTitle extends TextEntry
 {
-    use CanAllowHtml, CanModifyState;
-
-    protected string $viewIdentifier = 'activityTitle';
-
-    protected string $view = 'activity-timeline::infolists.components.activity-title';
-
-    public function getViewIdentifier(): string
-    {
-        return $this->viewIdentifier;
-    }
+    use CanModifyState;
+    use RendersTimelineText;
 }

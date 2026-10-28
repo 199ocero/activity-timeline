@@ -2,19 +2,18 @@
 
 namespace JaOcero\ActivityTimeline\Concerns;
 
+use BackedEnum;
 use Closure;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View;
 
 trait HasEmptyState
 {
-    protected View|Htmlable|Closure|null $emptyState = null;
-
     protected string|Htmlable|Closure|null $emptyStateDescription = null;
 
     protected string|Htmlable|Closure|null $emptyStateHeading = null;
 
-    protected string|Closure|null $emptyStateIcon = null;
+    protected string|BackedEnum|Htmlable|Closure|null $emptyStateIcon = null;
 
     public function emptyStateDescription(string|Htmlable|Closure|null $description): static
     {
@@ -30,7 +29,7 @@ trait HasEmptyState
         return $this;
     }
 
-    public function emptyStateIcon(string|Closure|null $icon): static
+    public function emptyStateIcon(string|BackedEnum|Htmlable|Closure|null $icon): static
     {
         $this->emptyStateIcon = $icon;
 
@@ -39,16 +38,16 @@ trait HasEmptyState
 
     public function getEmptyStateDescription(): string|Htmlable|null
     {
-        return $this->evaluate($this->emptyStateDescription);
+        return $this->evaluate($this->emptyStateDescription) ?? __('activity-timeline::timeline.empty_state.description');
     }
 
     public function getEmptyStateHeading(): string|Htmlable
     {
-        return $this->evaluate($this->emptyStateHeading) ?? 'No '.str($this->getName())->title();
+        return $this->evaluate($this->emptyStateHeading) ?? __('activity-timeline::timeline.empty_state.heading');
     }
 
-    public function getEmptyStateIcon(): string
+    public function getEmptyStateIcon(): string|BackedEnum|Htmlable
     {
-        return $this->evaluate($this->emptyStateIcon) ?? 'heroicon-o-x-mark';
+        return $this->evaluate($this->emptyStateIcon) ?? Heroicon::OutlinedBoltSlash;
     }
 }

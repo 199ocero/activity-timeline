@@ -2,60 +2,57 @@
 
 namespace JaOcero\ActivityTimeline\Components;
 
-use Filament\Forms\Components\Concerns\CanAllowHtml;
-use Filament\Infolists\Components\Entry;
+use Carbon\CarbonInterface;
+use Closure;
+use Filament\Infolists\Components\TextEntry;
 use Illuminate\Support\Carbon;
 use JaOcero\ActivityTimeline\Concerns\CanModifyState;
+use JaOcero\ActivityTimeline\Concerns\RendersTimelineText;
+use Throwable;
 
-class ActivityDate extends Entry
+class ActivityDate extends TextEntry
 {
-    use CanAllowHtml, CanModifyState;
+    use CanModifyState;
+    use RendersTimelineText;
 
-    protected string $viewIdentifier = 'activityDate';
-
-    protected string $view = 'activity-timeline::infolists.components.activity-date';
-
-    protected ?string $date = null;
-
-    protected ?string $dateFormat = null;
-
-    protected ?string $dateTimezone = null;
-
-    public function date(?string $format = null, ?string $timezone = null): static
+    protected function setUp(): void
     {
+        parent::setUp();
 
-        $this->dateFormat = $format;
-        $this->dateTimezone = $timezone;
+        $this->dateTime();
+    }
+
+    /**
+     * Show "2 hours ago" with the full date and time in a tooltip.
+     */
+    public function relative(bool|Closure $condition = true, string|Closure|null $tooltipFormat = null): static
+    {
+        if (! $this->evaluate($condition)) {
+            return $this;
+        }
+
+        $this->since();
+        $this->dateTimeTooltip($tooltipFormat);
 
         return $this;
     }
 
-    public function getDate($value): ?string
+    /**
+     * The state as a Carbon instance in the entry's timezone, used for the
+     * `<time datetime>` attribute and for grouping items by day.
+     */
+    public function getTimelineDate(): ?CarbonInterface
     {
-        $date = Carbon::parse($value)
-            ->setTimezone($this->getTimezone());
+        $state = $this->getState();
 
-        if ($this->getFormat() != null) {
-            $this->date = $date->translatedFormat($this->getFormat());
-        } else {
-            $this->date = $date;
+        if (blank($state) || is_array($state)) {
+            return null;
         }
 
-        return $this->evaluate($this->date);
-    }
-
-    public function getFormat(): ?string
-    {
-        return $this->evaluate($this->dateFormat);
-    }
-
-    public function getTimezone(): ?string
-    {
-        return $this->evaluate($this->dateTimezone) ?? config('app.timezone');
-    }
-
-    public function getViewIdentifier(): string
-    {
-        return $this->viewIdentifier;
+        try {
+            return Carbon::parse($state)->setTimezone($this->getTimezone());
+        } catch (Throwable) {
+            return null;
+        }
     }
 }
